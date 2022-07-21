@@ -11,9 +11,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQL10Dialect
   flyway:
     enabled: false
-server:
-  port: 8000
-
 app:
   jjwt:
     secret: ThisIsSecretForJWTHS512SignatureAlgorithmThatMUSTHave512bitsKeySize
