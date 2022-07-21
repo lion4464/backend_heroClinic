@@ -1,0 +1,1 @@
+INSERT INTO "public"."users_role"("user_entity_id", "role_id") VALUES ((SELECT id FROM users WHERE users.username='hero'),(SELECT id FROM role WHERE role.name='ROLE_MANAGER'));

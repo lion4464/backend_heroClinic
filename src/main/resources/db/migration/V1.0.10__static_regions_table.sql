@@ -1,0 +1,14 @@
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (1, 'Қорақалпоғистон Республикаси', 'Республика Каракалпакстан');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (2, 'Андижон вилояти', 'Андижанская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (3, 'Бухоро вилояти', 'Бухарская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (4, 'Жиззах вилояти', 'Джизакская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (5, 'Қашқадарё вилояти', 'Кашкадарьинская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (6, 'Навоий вилояти', 'Навоийская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (7, 'Наманган вилояти', 'Наманганская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (8, 'Самарқанд вилояти', 'Самаркандская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (9, 'Сурхандарё вилояти', 'Сурхандарьинская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (10, 'Сирдарё вилояти', 'Сырдарьинская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (11, 'Тошкент вилояти', 'Ташкентская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (12, 'Фарғона вилояти', 'Ферганская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (13, 'Хоразм вилояти', 'Хорезмская область');
+INSERT INTO "public"."regions"("id", "name_oz", "name_ru") VALUES (14, 'Тошкент шаҳри', 'Город Ташкент');

@@ -1,0 +1,59 @@
+package com.example.demo.workers;
+
+import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.history_worker_salary.HistoryWorkerSalaryDto;
+import com.example.demo.history_worker_salary.HistoryWorkerSalaryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/worker")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+public class ControllerWorker {
+    private final WorkerService workerService;
+    private final WorkerMapper workerMapper;
+    private final HistoryWorkerSalaryService historyWorkerSalaryService;
+
+    public ControllerWorker(WorkerService workerService, WorkerMapper workerMapper, HistoryWorkerSalaryService historyWorkerSalaryService) {
+        this.workerService = workerService;
+        this.workerMapper = workerMapper;
+        this.historyWorkerSalaryService = historyWorkerSalaryService;
+    }
+    @PostMapping("/save")
+    public ResponseEntity<WorkerFullDTO> save(@Valid @RequestBody WorkerRequest request){
+        return new ResponseEntity<>(workerMapper.toDto(workerService.save(request)), HttpStatus.OK);
+    }
+    @GetMapping("/all_active_status")
+    public ResponseEntity<List<WorkerFullDTO>> all(){
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(workerMapper.fromPageEntity(workerService.findAllActiveStatus(userDetails.getUserEntity())));
+    }
+    @GetMapping("/all_inactive_status")
+    public ResponseEntity<List<WorkerFullDTO>> inactivestatus(){
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(workerMapper.fromPageEntity(workerService.findAllInactiveStatus(userDetails.getUserEntity())));
+    }
+    @GetMapping("/about/{id}")
+    public ResponseEntity<List<HistoryWorkerSalaryDto>> getAbout(@PathVariable("id") UUID id){
+        return ResponseEntity.ok().body(historyWorkerSalaryService.findByWorkerId(id));
+    }
+    @PutMapping("/update")
+    public ResponseEntity<WorkerFullDTO> update(@Valid @RequestBody WorkerRequest obj){
+        return ResponseEntity.ok().body(workerMapper.toDto(workerService.update(obj)));
+    }
+    @GetMapping("/get/{id}")
+    public ResponseEntity<WorkerFullDTO> get(@PathVariable("id") UUID id){
+        return ResponseEntity.ok().body(workerMapper.toDto(workerService.get(id)));
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") UUID id){
+        return ResponseEntity.ok(workerService.delete(id));
+    }
+}

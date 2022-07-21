@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX room_type_myc ON room_type (name) WHERE (deleted is false );
