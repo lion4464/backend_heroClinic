@@ -8,8 +8,3 @@ CREATE TABLE IF NOT EXISTS "public"."department" (
                                        CONSTRAINT "department_pkey" PRIMARY KEY ("id")
 )
 ;
-
-ALTER TABLE "public"."department"
-    OWNER TO "postgres";
-
-COMMENT ON COLUMN "public"."department"."name" IS 'Department name';
