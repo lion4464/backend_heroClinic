@@ -29,7 +29,7 @@ public class ControllerUser {
 
 
     @PreAuthorize("hasRole('ROLE_MANAGER')")
-    @GetMapping("/all")
+    @GetMapping("/get_status_active")
     public ResponseEntity<List<HashMap<String,Object>>> all(){
     return ResponseEntity.ok().body(userService.getAllUsers());
     }
