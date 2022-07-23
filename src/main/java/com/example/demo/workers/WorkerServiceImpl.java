@@ -40,7 +40,7 @@ public class WorkerServiceImpl implements WorkerService{
         DepartmentEntity department = departmentService.get(request.getDepartmentId());
         SalaryTypeEntity salaryType = salaryTypeService.get(request.getSalaryTypeId());
         HistoryWorkerSalary historyWorkerSalary = new HistoryWorkerSalary();
-
+        entity.setCompany(department.getCompany());
         entity.setFullname(request.getFullname());
         entity.setMobile(request.getMobile());
         entity.setDestrict(request.getDestrict());
@@ -55,6 +55,7 @@ public class WorkerServiceImpl implements WorkerService{
         entity.setPosition(request.getPosition());
         historyWorkerSalary.setReviewAmount(request.getReviewAmount());
         historyWorkerSalary.setAmount(request.getSalaryAmount());
+        historyWorkerSalary.setCompany(department.getCompany());
 
         entity.setSalaryAmount(request.getSalaryAmount());
         entity.setKeyId(request.getKeyId());
