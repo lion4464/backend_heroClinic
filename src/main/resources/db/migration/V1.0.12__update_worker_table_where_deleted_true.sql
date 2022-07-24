@@ -1,0 +1,1 @@
+UPDATE worker SET deleted=false WHERE deleted=true
