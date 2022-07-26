@@ -34,7 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public DepartmentEntity get(UUID id) throws DataNotFoundException {
-        Optional<DepartmentEntity> res = departmentRepository.findById(id);
+        Optional<DepartmentEntity> res = departmentRepository.findByIdAndDeleted(id,false);
         if (res.isEmpty())
             throw new DataNotFoundException("Department is not found :(");
         return res.get();
@@ -48,7 +48,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public List<DepartmentEntity> all(UserEntity user) {
-        return departmentRepository.findAllByCompanyId(user.getCompanyId());
+        return departmentRepository.findAllByCompanyIdAndDeleted(user.getCompanyId(),false);
     }
 
     @Override

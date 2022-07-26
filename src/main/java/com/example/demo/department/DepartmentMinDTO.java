@@ -14,4 +14,5 @@ import java.util.UUID;
 public class DepartmentMinDTO {
     private UUID id;
     private String name;
+    private boolean deleted;
 }

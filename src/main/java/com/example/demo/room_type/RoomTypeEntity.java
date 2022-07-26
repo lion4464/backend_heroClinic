@@ -16,7 +16,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "room_type")
 @SQLDelete(sql = "update room_type set deleted = 'true' where id = ?")
-@Where(clause = "deleted = 'false'")
 public class RoomTypeEntity  extends AuditingGeneric<UUID> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
