@@ -16,8 +16,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "patient",uniqueConstraints = { @UniqueConstraint(name = "patient_passport_k1", columnNames = { "passport"}) })
 @SQLDelete(sql = "update patient set deleted = 'true' where id = ?")
-@Where(clause = "deleted = 'false'")
-
 public class PatientEntity extends AuditingGeneric<UUID> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

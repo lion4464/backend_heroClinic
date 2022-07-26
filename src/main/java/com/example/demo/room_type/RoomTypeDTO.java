@@ -14,5 +14,6 @@ import java.util.UUID;
 public class RoomTypeDTO {
     private UUID id;
     private String name;
+    private boolean deleted;
     private Float paymentAmount;
 }

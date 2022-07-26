@@ -23,7 +23,7 @@ public class RoomTypeServiceImpl implements RoomTypeService{
 
     @Override
     public RoomTypeEntity get(UUID id) throws DataNotFoundException {
-        Optional<RoomTypeEntity> optional = roomTypeRepository.findById(id);
+        Optional<RoomTypeEntity> optional = roomTypeRepository.findByIdAndDeleted(id,false);
         if (optional.isEmpty())
             throw new DataNotFoundException("Room Type is not found this id");
         return optional.get();
@@ -37,7 +37,7 @@ public class RoomTypeServiceImpl implements RoomTypeService{
 
     @Override
     public List<RoomTypeEntity> all(UserEntity user) {
-        return roomTypeRepository.findAllByCompanyId(user.getCompanyId());
+        return roomTypeRepository.findAllByCompanyIdAndDeleted(user.getCompanyId(),false);
     }
 
     @Override

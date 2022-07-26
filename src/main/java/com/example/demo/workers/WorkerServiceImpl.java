@@ -71,7 +71,7 @@ public class WorkerServiceImpl implements WorkerService{
 
     @Override
     public WorkersEntity get(UUID id) throws DataNotFoundException {
-        Optional<WorkersEntity> optional = workerRepository.findById(id);
+        Optional<WorkersEntity> optional = workerRepository.findByIdAndDeleted(id,false);
         if (optional.isEmpty())
             throw new DataNotFoundException("Worker not found:/");
         return optional.get();
@@ -86,12 +86,12 @@ public class WorkerServiceImpl implements WorkerService{
 
     @Override
     public List<WorkersEntity> findAllInactiveStatus(UserEntity user) {
-        return workerRepository.findAllByStatusAndCompanyId(DataStatusEnum.INACTIVE,user.getCompanyId());
+        return workerRepository.findAllByStatusAndCompanyIdAndDeleted(DataStatusEnum.INACTIVE,user.getCompanyId(),false);
     }
 
     @Override
     public List<WorkersEntity> findAllActiveStatus(UserEntity user) {
-        return workerRepository.findAllByStatusAndCompanyId(DataStatusEnum.ACTIVE,user.getCompanyId());
+        return workerRepository.findAllByStatusAndCompanyIdAndDeleted(DataStatusEnum.ACTIVE,user.getCompanyId(),false);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.demo.patients;
 
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.generic.DeletedSpecification;
 import com.example.demo.generic.PageableRequest;
 
 import com.example.demo.generic.UUIDSpecification;
@@ -64,7 +65,10 @@ public class ControllerPatiant {
         );
         return ResponseEntity.ok(patientConvertor.createFromEntities(patientService.all(
                 new SearchSpecification(pageable.getSearch())
-                        .and(new UUIDSpecification<PatientEntity>("companyId",userDetails.getUserEntity().getCompanyId())), pageRequest)));
+                        .and(new UUIDSpecification<PatientEntity>("companyId",userDetails.getUserEntity().getCompanyId())
+                                .and(new DeletedSpecification<>("deleted",false))), pageRequest)
+                )
+        );
     }
 
 
