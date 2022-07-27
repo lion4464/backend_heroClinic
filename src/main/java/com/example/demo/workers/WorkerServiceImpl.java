@@ -71,7 +71,7 @@ public class WorkerServiceImpl implements WorkerService{
 
     @Override
     public WorkersEntity get(UUID id) throws DataNotFoundException {
-        Optional<WorkersEntity> optional = workerRepository.findByIdAndDeleted(id,false);
+        Optional<WorkersEntity> optional = workerRepository.findById(id);
         if (optional.isEmpty())
             throw new DataNotFoundException("Worker not found:/");
         return optional.get();

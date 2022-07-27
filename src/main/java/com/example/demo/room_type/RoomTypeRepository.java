@@ -11,7 +11,6 @@ import java.util.UUID;
 public interface RoomTypeRepository extends JpaRepository<RoomTypeEntity, UUID> {
     List<RoomTypeEntity> findAllByCompanyId(UUID companyId);
 
-    Optional<RoomTypeEntity> findByIdAndDeleted(UUID id, boolean deleted);
 
     List<RoomTypeEntity> findAllByCompanyIdAndDeleted(UUID companyId, boolean deleted);
 }

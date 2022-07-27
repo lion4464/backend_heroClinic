@@ -11,5 +11,4 @@ import java.util.UUID;
 @Repository
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, UUID> {
     List<DepartmentEntity> findAllByCompanyIdAndDeleted(UUID companyId,Boolean deleted);
-    Optional<DepartmentEntity> findByIdAndDeleted(UUID id, boolean deleted);
 }
