@@ -5,55 +5,48 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-import org.springframework.web.servlet.resource.WebJarsResourceResolver;
-
-import java.util.List;
 
 @Configuration
 public class SwaggerUI{
 
+    public final static  String AccessToken = "Authorization";
 
+    @Bean
+    public GroupedOpenApi systemControllerGroup() {
+        return GroupedOpenApi
+                .builder()
+                .group("Authentiction")
+                .pathsToMatch("/api/auth/**")
+                .build();
+    }
 
     @Bean
     public GroupedOpenApi departmentGroup() {
         return GroupedOpenApi
                 .builder()
-                .group("department")
+                .group("Department")
                 .pathsToMatch("/api/department/**")
                 .build();
-
-
     }
 
-    @Bean
-    public GroupedOpenApi authGroup() {
-        return GroupedOpenApi
-                .builder()
-                .group("Authentication")
-                .pathsToMatch("/api/auth/**")
-                .build();
-
-
-    }
 
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .servers()
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth", new SecurityScheme().type(SecurityScheme.Type.HTTP).bearerFormat("JWT").scheme("bearer"))
+                        .addSecuritySchemes(AccessToken,
+                                new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .bearerFormat("JWT")
+                                .scheme("Bearer"))
                 )
                 .info(new Info()
-                        .title("Hero Clinic integration module")
+                        .title("Hero integration module")
                         .version("V1")
-                        .license(new License().name("Rstudio offerta").url("https://rstudio-hospital.herokuapp.com/"))
+                        .license(new License().name("Hero Clinic oferta").url(""))
                 );
     }
 }
