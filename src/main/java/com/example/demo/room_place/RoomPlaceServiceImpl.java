@@ -39,7 +39,7 @@ public class RoomPlaceServiceImpl implements RoomPlaceService {
     public RoomPlaceEntity get(UUID id) {
         Optional<RoomPlaceEntity> roomPlace=roomPlaceRepository.findById(id);
         if (roomPlace.isEmpty())
-            throw new DataNotFoundException("Not found");
+            throw new DataNotFoundException("Room place Not found");
         return roomPlace.get();
     }
 
