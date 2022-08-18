@@ -23,7 +23,7 @@ public class RoomPlaceEntity extends AuditingGeneric<UUID> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id", insertable = false, updatable = false, nullable = false)
     private UUID id;
-
+    @Column(name="pay_amount")
     private Float payAmount;
 
     private Integer placeNumber;
@@ -32,7 +32,7 @@ public class RoomPlaceEntity extends AuditingGeneric<UUID> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "worker_id", referencedColumnName = "id")
-    private WorkersEntity workers;
+    private WorkersEntity worker;
 
     @Column(name = "worker_id",insertable = false,updatable = false)
     private UUID workerId;

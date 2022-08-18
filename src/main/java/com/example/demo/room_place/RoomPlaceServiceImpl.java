@@ -49,7 +49,7 @@ public class RoomPlaceServiceImpl implements RoomPlaceService {
         List<RoomPlaceEntity> roomPlaceEntities=roomPlaceRepository.getAllByClosedDateAndRoomIdAndCompanyId(0L,roomId,companyId);
         for (int i=0;i<roomPlaceEntities.size();i++)
         {
-            roomPlaceEntities.get(i).setWorkers(workerService.get(roomPlaceEntities.get(i).getWorkerId()));
+            roomPlaceEntities.get(i).setWorker(workerService.get(roomPlaceEntities.get(i).getWorkerId()));
         }
         if (roomPlaceEntities.isEmpty())
             throw new DataNotFoundException("Free place not found");
