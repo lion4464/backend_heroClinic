@@ -148,11 +148,11 @@ public class RoomServiceImpl implements RoomService{
         return entity;
     }
        private RoomEntity getReadyEntityForUpdate(RoomRequest request,RoomTypeEntity roomType,RoomEntity entity){
-
                entity.setName(request.getName());
            List<RoomPlaceEntity> allplacesInRoom = new ArrayList<>();
                  if (Float.compare(roomType.getPaymentAmount(),entity.getPayAmount()) != 0){
                      entity.setPayAmount(roomType.getPaymentAmount());
+
                      logger.info("Update room {} to db",request.getName());
                      HistoryRoomEntity historyRoomEntity = new HistoryRoomEntity();
                      historyRoomEntity.setRoom(entity);
@@ -165,6 +165,7 @@ public class RoomServiceImpl implements RoomService{
                          roomPlace.setStatus(request.getStatus());
                      }
                  }
+                 entity.setRoomType(roomType);
                  entity.setStatus(request.getStatus());
            roomPlaceService.saveAll(allplacesInRoom);
            roomRepository.save(entity);
