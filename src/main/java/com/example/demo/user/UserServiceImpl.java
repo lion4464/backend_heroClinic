@@ -129,10 +129,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public List<HashMap<String, Object>> getAllUsers() {
+    public List<HashMap<String, Object>> getAllUsers(UserEntity userEntity, DataStatusEnum status) {
         logger.info("Fetching all users");
         List<HashMap<String, Object>> result = new ArrayList<>();
-        for (UserEntity user : userRepository.findAll()) {
+        for (UserEntity user : userRepository.findAllByCompanyIdAndStatus(userEntity.getCompanyId(),status)) {
             HashMap<String, Object> res = new HashMap<>();
             res.put("id", user.getId());
             res.put("username", user.getUsername());

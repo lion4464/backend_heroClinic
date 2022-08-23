@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface UserService {
 UserEntity getUser(String username);
-List<HashMap<String,Object>> getAllUsers();
+List<HashMap<String,Object>> getAllUsers(UserEntity user, DataStatusEnum status);
 AuthResponse signIn(SignInRequest signInRequest);
 AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException;
 UserEntity findById(UUID userId);
