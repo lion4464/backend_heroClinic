@@ -1,8 +1,10 @@
 package com.example.demo.user;
 
+import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.exceptions.DataNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,7 +33,14 @@ public class ControllerUser {
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @GetMapping("/get_status_active")
     public ResponseEntity<List<HashMap<String,Object>>> all(){
-    return ResponseEntity.ok().body(userService.getAllUsers());
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    return ResponseEntity.ok().body(userService.getAllUsers(userDetails.getUserEntity(),DataStatusEnum.ACTIVE));
+    }
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @GetMapping("/get_status_inactive")
+    public ResponseEntity<List<HashMap<String,Object>>> allInactive(){
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(userService.getAllUsers(userDetails.getUserEntity(),DataStatusEnum.INACTIVE));
     }
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PutMapping("/change-status/{id}")
