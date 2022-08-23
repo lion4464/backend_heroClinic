@@ -2,6 +2,7 @@ package com.example.demo.room;
 
 import com.example.demo.exceptions.NonUniqueResultException;
 import com.example.demo.generic.DataStatusEnum;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +24,7 @@ public interface RoomRepository extends JpaRepository<RoomEntity, UUID> {
 
     List<RoomEntity> findAllByStatusAndCompanyId(DataStatusEnum status,UUID companyId);
 
-
+    @EntityGraph(value = "RoomEntity.graph_1")
     Optional<RoomEntity> findByIdAndCompanyId(UUID id, UUID companyId);
 
     List<RoomEntity> findAllByCompanyIdAndRoomTypeId(UUID companyId, UUID roomId);

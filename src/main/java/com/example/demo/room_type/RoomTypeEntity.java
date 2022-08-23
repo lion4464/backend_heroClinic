@@ -22,7 +22,7 @@ public class RoomTypeEntity  extends AuditingGeneric<UUID> {
     @Column(name="id", insertable = false, updatable = false, nullable = false)
     private UUID id;
     private String name;
-
+    @Column(name = "payment_amount")
     private Float paymentAmount;
 
 }
