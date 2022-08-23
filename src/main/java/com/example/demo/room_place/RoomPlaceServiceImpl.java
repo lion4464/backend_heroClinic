@@ -51,9 +51,7 @@ public class RoomPlaceServiceImpl implements RoomPlaceService {
         {
             roomPlaceEntities.get(i).setWorkers(workerService.get(roomPlaceEntities.get(i).getWorkerId()));
         }
-        if (roomPlaceEntities.isEmpty())
-            throw new DataNotFoundException("Free place not found");
-        return roomPlaceEntities;
+          return roomPlaceEntities;
     }
 
     @Override
