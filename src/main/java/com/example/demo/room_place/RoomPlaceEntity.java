@@ -7,22 +7,34 @@ import com.example.demo.room_type.RoomTypeEntity;
 import com.example.demo.workers.WorkersEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.UUID;
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "room_place")
+
+@NamedEntityGraph(
+        name = "RoomPlaceEntity.graph_1",
+        attributeNodes = {
+                @NamedAttributeNode("room")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "RoomEntity.graph_1", attributeNodes = @NamedAttributeNode("roomType"))
+        }
+)
 public class RoomPlaceEntity extends AuditingGeneric<UUID> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id", insertable = false, updatable = false, nullable = false)
     private UUID id;
+
     @Column(name="pay_amount")
     private Float payAmount;
 
