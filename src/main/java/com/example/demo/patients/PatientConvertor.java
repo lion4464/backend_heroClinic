@@ -13,6 +13,7 @@ public class PatientConvertor extends Convertor<PatientDTO,PatientEntity> {
                 patient.getBirthdate(),
                 patient.getMobile(),
                 patient.getGender(),
+                patient.isDeleted(),
                 patient.getRegion(),
                 patient.getDestrict(),
                 patient.getArea(),

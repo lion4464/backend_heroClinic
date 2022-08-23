@@ -1,0 +1,1 @@
+UPDATE department SET deleted=false WHERE deleted=true

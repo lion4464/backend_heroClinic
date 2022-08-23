@@ -1,6 +1,7 @@
 package com.example.demo.room_place;
 
 import com.example.demo.room.RoomResponse;
+import com.example.demo.workers.WorkerForRoomInvoiceDTO;
 import com.example.demo.workers.WorkerFullDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,8 @@ public class RoomPlaceResponce {
     private Float payAmount;
 
     private Integer placeNumber;
+
+    private WorkerForRoomInvoiceDTO worker;
 
     private Float protcent;
 

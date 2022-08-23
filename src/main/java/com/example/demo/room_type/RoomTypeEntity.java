@@ -16,14 +16,13 @@ import java.util.UUID;
 @Entity
 @Table(name = "room_type")
 @SQLDelete(sql = "update room_type set deleted = 'true' where id = ?")
-@Where(clause = "deleted = 'false'")
 public class RoomTypeEntity  extends AuditingGeneric<UUID> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id", insertable = false, updatable = false, nullable = false)
     private UUID id;
     private String name;
-
+    @Column(name = "payment_amount")
     private Float paymentAmount;
 
 }

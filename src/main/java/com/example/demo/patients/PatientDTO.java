@@ -21,6 +21,8 @@ public class PatientDTO {
     @NotBlank(message = "Gender must be filled because it is required!!!")
     private String gender;
 
+    private Boolean deleted;
+
     private String region;
 
     private String destrict;

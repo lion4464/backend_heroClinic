@@ -21,12 +21,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "worker")
 @SQLDelete(sql = "update worker set deleted = 'true' where id = ?")
-@Where(clause = "deleted = 'false'")
-@NamedEntityGraph(name = "WorkersEntity.graph_1",
-        attributeNodes = {
-                @NamedAttributeNode("department"),
-                }
-)
 public class WorkersEntity extends AuditingGeneric<UUID> {
 
     @Id

@@ -16,7 +16,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "company")
 @SQLDelete(sql = "update company set deleted = 'true' where id = ?")
-@Where(clause = "deleted = 'false'")
 public class CompanyEntity extends AuditGeneric<UUID> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

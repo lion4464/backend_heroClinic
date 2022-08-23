@@ -1,5 +1,6 @@
-package com.example.demo.department;
+package com.example.demo.workers;
 
+import com.example.demo.generic.DataStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,10 @@ import java.util.UUID;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepartmentMinDTO {
+public class WorkerForRoomInvoiceDTO {
     private UUID id;
-    private String name;
-    private boolean deleted;
+    private String fullname;
+    private String mobile;
+    private DataStatusEnum status;
+
 }
