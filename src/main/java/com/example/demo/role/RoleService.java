@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RoleService {
-    RoleEntity saveRole(RoleRequest request, UserEntity user);
+
     RoleEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
-    List<RoleEntity> allRole(UserEntity user);
+    List<RoleEntity> allRole();
 
     RoleEntity findByName(String roleName);
 
 
-    RoleEntity updateRole(RoleRequest obj);
+
 }

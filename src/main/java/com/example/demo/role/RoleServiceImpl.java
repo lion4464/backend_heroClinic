@@ -22,14 +22,7 @@ public class RoleServiceImpl implements RoleService{
         this.roleRepository = roleRepository;
     }
 
-    public RoleEntity saveRole(RoleRequest request, UserEntity user){
-        logger.info("Saving new role {} to db",request.getName());
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setName(request.getName());
-        roleEntity.setCompany(user.getCompany());
-        roleRepository.save(roleEntity);
-        return roleEntity;
-    }
+
 
     public RoleEntity get(UUID id) throws DataNotFoundException {
         Optional<RoleEntity> res = roleRepository.findById(id);
@@ -42,8 +35,8 @@ public class RoleServiceImpl implements RoleService{
         return "Successfully removed";
     }
 
-    public List<RoleEntity> allRole(UserEntity user){
-        return roleRepository.findAllByCompanyId(user.getCompanyId());
+    public List<RoleEntity> allRole(){
+        return roleRepository.findAll();
     }
 
     @Override
@@ -51,13 +44,5 @@ public class RoleServiceImpl implements RoleService{
         return roleRepository.findByName(roleName);
     }
 
-    @Override
-    public RoleEntity updateRole(RoleRequest obj){
-        Optional<RoleEntity> optional=roleRepository.findById(obj.getId());
-        if (optional.isEmpty())
-            throw new DataNotFoundException(obj.getId()+" isn't not found");
-            RoleEntity entity = optional.get();
-            entity.setName(obj.getName());
-        return roleRepository.save(entity);
-    }
+
 }

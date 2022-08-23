@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/role")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_USER')")
 public class ControllerRole {
     private final RoleService roleService;
     private final Rolemapper rolemapper;
@@ -25,27 +26,13 @@ public class ControllerRole {
         this.rolemapper = rolemapper;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<RoleDto> save(@RequestBody RoleRequest request){
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new ResponseEntity<>(rolemapper.toDto(roleService.saveRole(request,userDetails.getUserEntity())), HttpStatus.OK);
-    }
     @GetMapping("/all")
     public ResponseEntity<List<RoleDto>> all(){
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok().body(rolemapper.fromPageEntity(roleService.allRole(userDetails.getUserEntity())));
-    }
-    @PutMapping("/update")
-    public ResponseEntity<RoleDto> update(@Valid @RequestBody RoleRequest obj){
-        return ResponseEntity.ok().body(rolemapper.toDto(roleService.updateRole(obj)));
+         return ResponseEntity.ok().body(rolemapper.fromPageEntity(roleService.allRole()));
     }
     @GetMapping("get/{id}")
     public ResponseEntity<RoleDto> get(@PathVariable("id") UUID id){
         return ResponseEntity.ok().body(rolemapper.toDto(roleService.get(id)));
-    }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") UUID id){
-        return ResponseEntity.ok(roleService.delete(id));
     }
 
 }
