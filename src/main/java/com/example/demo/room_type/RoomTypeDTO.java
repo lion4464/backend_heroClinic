@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Data
@@ -14,5 +15,6 @@ import java.util.UUID;
 public class RoomTypeDTO {
     private UUID id;
     private String name;
+    @NotNull(message = "paymentAmount_not_null")
     private Float paymentAmount;
 }
