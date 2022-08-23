@@ -21,6 +21,7 @@ public class WorkerFullDTO {
     private String destrict;
     private String gender;
     private Long birthdate;
+    private boolean deleted;
     private Long startedDate;
     private Long expiredDate;
     private DepartmentMinDTO department;

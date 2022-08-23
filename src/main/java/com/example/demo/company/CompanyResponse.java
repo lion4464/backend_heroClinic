@@ -12,6 +12,7 @@ import java.util.UUID;
 public class CompanyResponse {
     private UUID id;
     private String name;
+    private Boolean deleted;
     private Long createdDate;
     private Long modifiedDate;
 }

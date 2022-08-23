@@ -48,7 +48,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public List<DepartmentEntity> all(UserEntity user) {
-        return departmentRepository.findAllByCompanyId(user.getCompanyId());
+        return departmentRepository.findAllByCompanyIdAndDeleted(user.getCompanyId(),false);
     }
 
     @Override

@@ -132,7 +132,7 @@ public class RoomServiceImpl implements RoomService{
                 roomPlaceEntity.setPlaceNumber(i);
                 roomPlaceEntity.setClosedDate(request.getClosedDate());
                 roomPlaceEntity.setPayAmount(roomType.getPaymentAmount());
-                roomPlaceEntity.setWorkers(workers);
+                roomPlaceEntity.setWorker(workers);
                 roomPlaceEntity.setRoom(entity);
                 roomPlaceEntity.setCompany(user.getCompany());
                 roomPlaceEntity.setRoomType(roomType);

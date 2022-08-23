@@ -39,7 +39,7 @@ public class RoomPlaceServiceImpl implements RoomPlaceService {
     public RoomPlaceEntity get(UUID id) {
         Optional<RoomPlaceEntity> roomPlace=roomPlaceRepository.findById(id);
         if (roomPlace.isEmpty())
-            throw new DataNotFoundException("Not found");
+            throw new DataNotFoundException("Room place Not found");
         return roomPlace.get();
     }
 
@@ -49,7 +49,7 @@ public class RoomPlaceServiceImpl implements RoomPlaceService {
         List<RoomPlaceEntity> roomPlaceEntities=roomPlaceRepository.getAllByClosedDateAndRoomIdAndCompanyId(0L,roomId,companyId);
         for (int i=0;i<roomPlaceEntities.size();i++)
         {
-            roomPlaceEntities.get(i).setWorkers(workerService.get(roomPlaceEntities.get(i).getWorkerId()));
+            roomPlaceEntities.get(i).setWorker(workerService.get(roomPlaceEntities.get(i).getWorkerId()));
         }
           return roomPlaceEntities;
     }

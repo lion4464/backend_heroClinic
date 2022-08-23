@@ -37,7 +37,7 @@ public class RoomTypeServiceImpl implements RoomTypeService{
 
     @Override
     public List<RoomTypeEntity> all(UserEntity user) {
-        return roomTypeRepository.findAllByCompanyId(user.getCompanyId());
+        return roomTypeRepository.findAllByCompanyIdAndDeleted(user.getCompanyId(),false);
     }
 
     @Override

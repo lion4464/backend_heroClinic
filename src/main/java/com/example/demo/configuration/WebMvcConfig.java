@@ -21,13 +21,10 @@ public class WebMvcConfig extends WebSecurityConfigurerAdapter {
         this.authenticationFilterBean = authenticationFilterBean;
     }
 
-
-
-
     @Override
     protected void configure(HttpSecurity auth) throws Exception {
 
-            final String[] authWhitelist = {"/**","/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**","/api/role/**","/api/user/**","/api/auth/**", "/api/auth/*"};
+            final String[] authWhitelist = {"/**","/api/department/**","/webjars/**","/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**","/api/role/**","/api/user/**","/api/auth/**"};
                  auth
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
