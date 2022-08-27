@@ -2,18 +2,25 @@ package com.example.demo.room_type;
 
 
 import com.example.demo.exceptions.DataNotFoundException;
+import com.example.demo.generic.DataStatusEnum;
+import com.example.demo.room.RoomEntity;
+import com.example.demo.room.RoomRepository;
 import com.example.demo.user.UserEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 @Service
 public class RoomTypeServiceImpl implements RoomTypeService{
-    private final RoomTypeRepository roomTypeRepository;
 
-    public RoomTypeServiceImpl(RoomTypeRepository roomTypeRepository) {
+    private final RoomTypeRepository roomTypeRepository;
+    private final RoomRepository roomRepository;
+
+    public RoomTypeServiceImpl(RoomTypeRepository roomTypeRepository, RoomRepository roomRepository) {
         this.roomTypeRepository = roomTypeRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -45,6 +52,18 @@ public class RoomTypeServiceImpl implements RoomTypeService{
 
         return readyEntity(obj,user);
     }
+
+    @Override
+    public HashMap<String, RoomTypeEntity> getIssetRoomTypes(UserEntity userEntity) {
+    List<RoomEntity> roomEntityList = roomRepository.findAllByStatusAndCompanyId(DataStatusEnum.ACTIVE,userEntity.getCompanyId());
+    HashMap<String,RoomTypeEntity> resultMap = new HashMap<>();
+    for (RoomEntity room : roomEntityList) {
+            resultMap.put((room.getRoomType().getName()==null) ? "empty" : room.getRoomType().getName(),
+                    room.getRoomType());
+        }
+        return resultMap;
+    }
+
     private RoomTypeEntity readyEntity(RoomTypeDTO obj,UserEntity user){
 
         RoomTypeEntity entity;

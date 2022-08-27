@@ -7,6 +7,7 @@ import com.example.demo.history_room_amount.HistoryRoomService;
 import com.example.demo.history_worker_salary.HistoryWorkerSalaryDto;
 
 import com.example.demo.room_place.RoomPlaceResponce;
+import com.example.demo.room_type.RoomTypeDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
