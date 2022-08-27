@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +32,12 @@ public class RoomTypeController {
     public ResponseEntity<List<RoomTypeDTO>> all(){
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok().body(roomTypeMapper.fromPageEntity(roomTypeService.all(userDetails.getUserEntity())));
+    }
+
+    @GetMapping("/get_isset_room_types")
+    public ResponseEntity<Map<String,RoomTypeDTO>> getIssetRoomTypes(){
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok().body(roomTypeMapper.fromIssetRoomTypes(roomTypeService.getIssetRoomTypes(userDetails.getUserEntity())));
     }
     @PutMapping("/update")
     public ResponseEntity<RoomTypeDTO> update(@Valid @RequestBody RoomTypeDTO obj){
