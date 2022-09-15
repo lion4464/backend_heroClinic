@@ -21,7 +21,7 @@ public interface RoomService {
 
     RoomEntity update(RoomRequest obj,UserEntity user);
 
-    void changedSumIfRoomTypeSumChanged(UUID id, UUID roomType,UUID workerId,UserEntity user);
+    void changedSumIfRoomTypeSumChanged(UUID roomId, UUID roomType,UUID workerId,UserEntity user);
 
     List<RoomEntity> getByRoomTypeId(UserEntity user, UUID roomTypeId);
 }

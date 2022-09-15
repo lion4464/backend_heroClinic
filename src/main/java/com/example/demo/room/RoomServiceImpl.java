@@ -60,6 +60,7 @@ public class RoomServiceImpl implements RoomService{
         if (res.isEmpty())
             throw new DataNotFoundException("Room is not found :(");
         res.get().setFreePlace(roomPlaceService.getAllPlaceFree(id,user.getCompanyId()).size());
+
         return res.get();
     }
 
@@ -91,8 +92,8 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void changedSumIfRoomTypeSumChanged(UUID id, UUID roomType,UUID workerId,UserEntity user) {
-        update(new RoomRequest(id,roomType,DataStatusEnum.ACTIVE,workerId),user);
+    public void changedSumIfRoomTypeSumChanged(UUID roomId, UUID roomType,UUID workerId,UserEntity user) {
+        update(new RoomRequest(roomId,roomType,DataStatusEnum.ACTIVE,workerId),user);
     }
 
     @Override
@@ -148,7 +149,8 @@ public class RoomServiceImpl implements RoomService{
         return entity;
     }
        private RoomEntity getReadyEntityForUpdate(RoomRequest request,RoomTypeEntity roomType,RoomEntity entity){
-               entity.setName(request.getName());
+          if (request.getName()!=null)
+                    entity.setName(request.getName());
            List<RoomPlaceEntity> allplacesInRoom = new ArrayList<>();
                  if (Float.compare(roomType.getPaymentAmount(),entity.getPayAmount()) != 0){
                      entity.setPayAmount(roomType.getPaymentAmount());

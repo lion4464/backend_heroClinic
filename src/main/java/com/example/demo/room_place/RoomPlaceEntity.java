@@ -23,9 +23,6 @@ import java.util.UUID;
         name = "RoomPlaceEntity.graph_1",
         attributeNodes = {
                 @NamedAttributeNode("room")
-        },
-        subgraphs = {
-                @NamedSubgraph(name = "RoomEntity.graph_1", attributeNodes = @NamedAttributeNode("roomType"))
         }
 )
 public class RoomPlaceEntity extends AuditingGeneric<UUID> {
