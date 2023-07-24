@@ -1,11 +1,14 @@
 package com.example.demo.analyses_invoice;
 
 
+import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.generic.PageableRequest;
 import com.example.demo.generic.UUIDSpecification;
 import com.example.demo.workers.WorkerFullDTO;
 import com.example.demo.workers.WorkersEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -36,18 +39,22 @@ public class AnalysesInvoiceController {
         this.analyseInvoiceConvertor = analyseInvoiceConvertor;
     }
     @PostMapping("/save")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<AnalysesInvoiceResponse> save(@Valid @RequestBody AnalysesInvoiceRequest request){
         return new ResponseEntity<>(analysesInvoiceMapper.toDto(analysesInvoiceService.save(request)), HttpStatus.OK);
     }
     @PostMapping("/save-all")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<List<AnalysesInvoiceResponse>> saveAll(@Valid @RequestBody List<AnalysesInvoiceRequest> obj){
         return ResponseEntity.ok().body(analysesInvoiceMapper.fromEntityList(analysesInvoiceService.saveAll(obj)));
     }
     @PutMapping("/update")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<AnalysesInvoiceResponse> update(@Valid @RequestBody AnalysesInvoiceRequest obj){
         return ResponseEntity.ok().body(analysesInvoiceMapper.toDto(analysesInvoiceService.update(obj)));
     }
     @GetMapping("get/{id}")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<AnalysesInvoiceResponse> get(@PathVariable("id") UUID id){
         return ResponseEntity.ok().body(analysesInvoiceMapper.toDto(analysesInvoiceService.get(id)));
     }
@@ -67,6 +74,7 @@ public class AnalysesInvoiceController {
     }
 
     @GetMapping("/get_count")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<List<AnalyseInvoiseCounterDto>> getAllInvoicesBetweenDate(@RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date from, @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date to)
     {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -74,6 +82,7 @@ public class AnalysesInvoiceController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<String> delete(@PathVariable("id") UUID id){
         return ResponseEntity.ok(analysesInvoiceService.delete(id));
     }

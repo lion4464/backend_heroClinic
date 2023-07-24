@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,22 +32,31 @@ public class SwaggerUI{
                 .pathsToMatch("/api/department/**")
                 .build();
     }
+    @Bean
+    public GroupedOpenApi adminsGroup() {
+        return GroupedOpenApi
+                .builder()
+                .group("MANAGER-APIs")
+                .pathsToMatch("/api/**")
+                .build();
+    }
 
 
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
+                .addServersItem(new Server().url("/").description("Base application"))
                 .components(new Components()
                         .addSecuritySchemes(AccessToken,
                                 new SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .bearerFormat("JWT")
-                                .scheme("Bearer"))
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .bearerFormat("JWT")
+                                        .scheme("Bearer"))
                 )
                 .info(new Info()
-                        .title("Hero integration module")
+                        .title("Hospital api integration module")
                         .version("V1")
-                        .license(new License().name("Hero Clinic oferta").url(""))
+                        .license(new License().name("Hospital api").url("https://application.uz"))
                 );
     }
 }

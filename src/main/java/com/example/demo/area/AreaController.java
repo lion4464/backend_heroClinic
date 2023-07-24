@@ -1,9 +1,12 @@
 package com.example.demo.area;
 
+import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.districts.DestrictMapper;
 import com.example.demo.districts.DestrictService;
 import com.example.demo.region.RegionMapper;
 import com.example.demo.region.RegionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +32,7 @@ public class AreaController {
         this.destrictMapper = destrictMapper;
     }
     @GetMapping("/all")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<List<AreaDTO>> getArea(){
         List<AreaDTO> result = new ArrayList<>();
         result.add(new AreaDTO(regionMapper.fromEntityList(regionService.all()),destrictMapper.fromEntityList(districtService.all())));

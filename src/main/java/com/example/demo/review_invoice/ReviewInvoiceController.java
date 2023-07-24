@@ -1,9 +1,12 @@
 package com.example.demo.review_invoice;
 
+import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.generic.PageableRequest;
 import com.example.demo.generic.UUIDSpecification;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,26 +38,31 @@ public class ReviewInvoiceController {
     }
 
     @GetMapping("/get/{id}")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<ReviewInvoiceDTO> getid(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(reviewInvoicemapper.toDto(reviewInvoiceService.getId(id)));
     }
 
     @PostMapping("/save")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<ReviewInvoiceDTO> insert(@Valid @RequestBody ReviewInvoiceRequest obj) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(reviewInvoicemapper.toDto(reviewInvoiceService.save(obj,userDetails.getUserEntity())));
     }
 
     @PutMapping("/update")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<ReviewInvoiceDTO> update(@Valid @RequestBody ReviewInvoiceRequest obj) {
         return ResponseEntity.ok(reviewInvoicemapper.toDto(reviewInvoiceService.update(obj)));
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<String> delete(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(reviewInvoiceService.delete(id));
     }
     @PostMapping("/pageable")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<Page<ReviewInvoiceDTO>> pageable(@RequestBody PageableRequest pageable){
         PageRequest pageRequest = PageRequest.of(
                 pageable.getPage(),
@@ -71,6 +79,7 @@ public class ReviewInvoiceController {
     }
 
     @GetMapping("/reviews_count")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<List<ReviewInvoiceCount>> getCountReviews(
             @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
             @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date to) {

@@ -1,5 +1,8 @@
 package com.example.demo.role_worker;
 
+import com.example.demo.configuration.SwaggerUI;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +18,7 @@ import java.util.Collection;
 public class GetRoleForUIController {
 
     @GetMapping
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public String getRole(Authentication authentication) {
             return authentication.getAuthorities().toString();
     }

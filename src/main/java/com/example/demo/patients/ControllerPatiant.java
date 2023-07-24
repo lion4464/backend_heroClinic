@@ -1,10 +1,13 @@
 package com.example.demo.patients;
 
+import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.generic.DeletedSpecification;
 import com.example.demo.generic.PageableRequest;
 
 import com.example.demo.generic.UUIDSpecification;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,27 +37,32 @@ public class ControllerPatiant {
         this.patientConvertor = patientConvertor;
     }
     @GetMapping("/get/{id}")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<PatientDTO> getid(@PathVariable("id") UUID id){
             return ResponseEntity.ok(patientmapper.toDto(patientService.getId(id)));
    }
 
     @PostMapping("/save")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<PatientDTO> insert(@Valid @RequestBody PatientDTO obj){
         UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     return  ResponseEntity.ok(patientmapper.toDto(patientService.insert(userDetails.getUserEntity(),patientmapper.fromDto(obj))));
     }
     @PutMapping("/update")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<PatientDTO> update(@Valid @RequestBody PatientDTO obj){
 
         return ResponseEntity.ok(patientmapper.toDto(patientService.update(patientmapper.fromDto(obj))));
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<String> delete(@PathVariable("id") UUID id){
         return ResponseEntity.ok(patientService.delete(id));
     }
     @PostMapping("/pageable")
+    @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<Page<PatientDTO>> pageable(@RequestBody PageableRequest pageable){
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PageRequest pageRequest = PageRequest.of(
