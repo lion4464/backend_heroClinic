@@ -2,7 +2,7 @@ spring:
   datasource:
     username: postgres
     password: RMTUOaK7scUs8t6MvXAm
-    url: jdbc:postgresql://containers-us-west-84.railway.app:7035/railway
+    url: jdbc:postgresql://containers-us-west-101.railway.app:7236/railway
 
   jpa:
     hibernate:
