@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
-    private void addRoleToUser(String userName, String roleName) {
+    private void addRoleToUser(String userName, String roleName) throws DataNotFoundException {
         logger.info("Saving new role({}) for user({})", roleName, userName);
         Optional<UserEntity> optional = userRepository.findByUsername(userName);
         if (optional.isEmpty())
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException {
+    public AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException, UserAlreadyExistException {
         Optional<UserEntity> optional = userRepository.findByUsername(signUpRequest.getUsername());
         if (optional.isPresent()) {
             throw new UserAlreadyExistException("name_is_already_exists");
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserEntity findById(UUID userId) {
+    public UserEntity findById(UUID userId) throws DataNotFoundException {
         UserEntity user = userRepository.findById(userId).get();
         if (!user.getStatus().equals(DataStatusEnum.ACTIVE))
             throw new DataNotFoundException("User not found in our Db");
@@ -193,7 +193,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
-    private UserEntity findOldPassword(String username, String oldPassword) throws NoSuchAlgorithmException {
+    private UserEntity findOldPassword(String username, String oldPassword) throws NoSuchAlgorithmException, DataNotFoundException {
         UserEntity userEntity = getUser(username);
         String oldPassswordFromRequest = generateMD5Hash(oldPassword);
         if (!userEntity.getHashPassword().equals(oldPassswordFromRequest))
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public HashMap<String, Object> changePassword(String username, PasswordRequest request) throws NoSuchAlgorithmException {
+    public HashMap<String, Object> changePassword(String username, PasswordRequest request) throws NoSuchAlgorithmException, DataNotFoundException {
         UserEntity entity = findOldPassword(username, request.getOldPassword());
         entity.setPassword(passwordEncoder.encode(request.getNewPassword()));
         entity.setHashPassword(generateMD5Hash(request.getNewPassword()));
@@ -215,7 +215,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserEntity changeStatus(UUID id, UserRequest request) {
+    public UserEntity changeStatus(UUID id, UserRequest request) throws DataNotFoundException {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isEmpty())
             throw new DataNotFoundException("User is not in our db");

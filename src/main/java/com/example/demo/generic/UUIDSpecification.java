@@ -1,7 +1,5 @@
 package com.example.demo.generic;
 
-import com.example.demo.analyses_invoice.SearchSpecification;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

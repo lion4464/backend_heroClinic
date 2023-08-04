@@ -4,13 +4,11 @@ package com.example.demo.analyses_invoice;
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.generic.PageableRequest;
+import com.example.demo.generic.SearchSpecification;
 import com.example.demo.generic.UUIDSpecification;
-import com.example.demo.workers.WorkerFullDTO;
-import com.example.demo.workers.WorkersEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -69,7 +67,7 @@ public class AnalysesInvoiceController {
         );
         return ResponseEntity.ok(analyseInvoiceConvertor.createFromEntities(analysesInvoiceService.all(
                 new UUIDSpecification<AnalysesInvoiceEntity>("companyId",userDetails.getUserEntity().getCompanyId())
-                        .and(new SearchSpecification(pageable.getSearch())), pageRequest)
+                        .and(new SearchSpecification<>(pageable.getSearch())), pageRequest)
         ));
     }
 

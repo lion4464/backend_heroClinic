@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiException extends RuntimeException{
+public class ApiException extends Exception{
     private  String message;
     private  HttpStatus httpStatus;
     private  ZonedDateTime timestamp;

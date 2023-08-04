@@ -1,6 +1,8 @@
 package com.example.demo.analyses_invoice;
 
 
+import com.example.demo.analyses.AnalysesEntity;
+import com.example.demo.generic.JpaGenericService;
 import com.example.demo.user.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Date;
 
-public interface AnalysesInvoiceService {
+public interface AnalysesInvoiceService extends JpaGenericService<AnalysesEntity, UUID> {
     AnalysesInvoiceEntity update(AnalysesInvoiceRequest obj);
     String delete(UUID id);
     AnalysesInvoiceEntity get(UUID id);

@@ -1,9 +1,12 @@
 package com.example.demo.workers;
 
+import com.example.demo.analyses.AnalysesEntity;
 import com.example.demo.department.DepartmentEntity;
 import com.example.demo.department.DepartmentService;
 import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.generic.DataStatusEnum;
+import com.example.demo.generic.JpaGenericRepository;
+import com.example.demo.generic.JpaGenericServiceImpl;
 import com.example.demo.history_worker_salary.HistoryWorkerSalary;
 import com.example.demo.history_worker_salary.HistoryWorkerSalaryService;
 import com.example.demo.salary_type.SalaryTypeEntity;
@@ -16,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class WorkerServiceImpl implements WorkerService{
+public class WorkerServiceImpl  extends JpaGenericServiceImpl<WorkersEntity, UUID> implements WorkerService{
 
     private final WorkerRepository workerRepository;
     private final DepartmentService departmentService;
@@ -34,7 +37,7 @@ public class WorkerServiceImpl implements WorkerService{
     }
 
     @Override
-    public WorkersEntity save(WorkerRequest request) {
+    public WorkersEntity saveWorker(WorkerRequest request) {
         logger.info("Saving new  worker {} to db",request.getFullname());
         WorkersEntity entity = new WorkersEntity();
         DepartmentEntity department = departmentService.get(request.getDepartmentId());
@@ -69,20 +72,8 @@ public class WorkerServiceImpl implements WorkerService{
     return result;
     }
 
-    @Override
-    public WorkersEntity get(UUID id) throws DataNotFoundException {
-        Optional<WorkersEntity> optional = workerRepository.findById(id);
-        if (optional.isEmpty())
-            throw new DataNotFoundException("Worker not found:/");
-        return optional.get();
-    }
 
-    @Override
-    public String delete(UUID id) {
 
-        workerRepository.deleteById(id);
-        return "Successfully removed";
-    }
 
     @Override
     public List<WorkersEntity> findAllInactiveStatus(UserEntity user) {
@@ -95,11 +86,11 @@ public class WorkerServiceImpl implements WorkerService{
     }
 
     @Override
-    public WorkersEntity update(WorkerRequest request) {
+    public WorkersEntity updateWorker(WorkerRequest request) throws DataNotFoundException {
         logger.info("Updating new  worker {} to db",request.getFullname());
         DepartmentEntity department = departmentService.get(request.getDepartmentId());
         SalaryTypeEntity salaryType = salaryTypeService.get(request.getSalaryTypeId());
-        WorkersEntity entity = get(request.getId());
+        WorkersEntity entity = findById(request.getId());
         entity.setFullname(request.getFullname());
         entity.setMobile(request.getMobile());
         entity.setDestrict(request.getDestrict());
@@ -146,11 +137,16 @@ public class WorkerServiceImpl implements WorkerService{
 
             }
 
-        return  workerRepository.save(entity);
+        return  save(entity);
 
     }
     public Long getMillisecondNow(){
         Date date = new Date();
         return date.getTime();
+    }
+
+    @Override
+    protected JpaGenericRepository<WorkersEntity, UUID> getRepository() {
+        return workerRepository;
     }
 }

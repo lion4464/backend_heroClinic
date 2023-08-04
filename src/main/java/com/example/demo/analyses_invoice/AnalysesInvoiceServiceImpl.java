@@ -89,8 +89,8 @@ public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
     }
 
 
-    private AnalysesInvoiceEntity getReadyEntity(AnalysesInvoiceRequest obj){
-        AnalysesEntity analyses = analysesService.get(obj.getAnalyseId());
+    private AnalysesInvoiceEntity getReadyEntity(AnalysesInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
+        AnalysesEntity analyses = analysesService.findById(obj.getAnalyseId());
         WorkersEntity worker =workerService.get(analyses.getWorkerId());
         if (worker.getStatus().equals(DataStatusEnum.INACTIVE))
             throw new StatusInactiveException("Worker status is INACTIVE");
