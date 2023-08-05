@@ -21,12 +21,12 @@ public class PatientDeptServiceImpl implements PatientDeptService {
         this.patientService = patientService;
     }
 
-    public PatientDeptEntity save(PatientDeptRequest request){
+    public PatientDeptEntity save(PatientDeptRequest request) throws DataNotFoundException {
         logger.info("Saving new  Patient Dept {} to db",request.getSum());
         PatientDeptEntity patientDeptEntity = new PatientDeptEntity();
         patientDeptEntity.setSum(request.getSum());
         patientDeptEntity.setPaymentType((request.getPaymentType()==null) ? PaymentType.CASH : request.getPaymentType());
-        patientDeptEntity.setPatient(patientService.getId(request.getPatientId()));
+        patientDeptEntity.setPatient(patientService.findById(request.getPatientId()));
         patientDeptRepository.save(patientDeptEntity);
         return patientDeptEntity;
     }
@@ -46,14 +46,14 @@ public class PatientDeptServiceImpl implements PatientDeptService {
     }
 
     @Override
-    public PatientDeptEntity update(PatientDeptRequest obj){
+    public PatientDeptEntity update(PatientDeptRequest obj) throws DataNotFoundException {
         Optional<PatientDeptEntity> optional= patientDeptRepository.findById(obj.getId());
         if (optional.isEmpty())
             throw new DataNotFoundException(obj.getId()+" isn't not found in Patient Dept");
             PatientDeptEntity entity = optional.get();
             entity.setPaymentType(obj.getPaymentType());
             entity.setSum(obj.getSum());
-        entity.setPatient(patientService.getId(obj.getPatientId()));
+        entity.setPatient(patientService.findById(obj.getPatientId()));
         return patientDeptRepository.save(entity);
     }
 

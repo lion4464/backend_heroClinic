@@ -25,7 +25,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyEntity get(UUID id) {
+    public CompanyEntity get(UUID id) throws DataNotFoundException {
         Optional<CompanyEntity> companyRes = companyRepository.findById(id);
         if (companyRes.isEmpty())
             throw new DataNotFoundException("Company is not found :(");
@@ -33,7 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyEntity update(CompanyRequest request) {
+    public CompanyEntity update(CompanyRequest request) throws DataNotFoundException {
         Optional<CompanyEntity> companyRes = companyRepository.findById(request.getId());
         if (companyRes.isEmpty())
             throw new DataNotFoundException("Company is not found :(");

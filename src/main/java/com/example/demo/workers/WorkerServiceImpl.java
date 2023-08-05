@@ -37,7 +37,7 @@ public class WorkerServiceImpl  extends JpaGenericServiceImpl<WorkersEntity, UUI
     }
 
     @Override
-    public WorkersEntity saveWorker(WorkerRequest request) {
+    public WorkersEntity saveWorker(WorkerRequest request) throws DataNotFoundException {
         logger.info("Saving new  worker {} to db",request.getFullname());
         WorkersEntity entity = new WorkersEntity();
         DepartmentEntity department = departmentService.get(request.getDepartmentId());

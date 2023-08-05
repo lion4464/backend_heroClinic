@@ -2,6 +2,7 @@ package com.example.demo.expense;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class ControllerExpense {
 
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<ExpenseDto> save(@Valid @RequestBody ExpenseRequest request){
+    public ResponseEntity<ExpenseDto> save(@Valid @RequestBody ExpenseRequest request) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(expensemapper.toDto(expenseService.save(userDetails.getUserEntity(),request)), HttpStatus.OK);
     }
@@ -41,13 +42,13 @@ public class ControllerExpense {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<ExpenseDto> update(@Valid @RequestBody ExpenseRequest obj){
+    public ResponseEntity<ExpenseDto> update(@Valid @RequestBody ExpenseRequest obj) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok().body(expensemapper.toDto(expenseService.update(userDetails.getUserEntity(),obj)));
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<ExpenseDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<ExpenseDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(expensemapper.toDto(expenseService.get(id)));
     }
     @DeleteMapping("/delete/{id}")

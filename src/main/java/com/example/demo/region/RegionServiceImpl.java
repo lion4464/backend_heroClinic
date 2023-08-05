@@ -15,7 +15,7 @@ public class RegionServiceImpl implements RegionService{
         }
 
     @Override
-    public RegionEntity get(Long id) {
+    public RegionEntity get(Long id) throws DataNotFoundException {
         Optional<RegionEntity> entity = RegionRepository.findById(id);
         if (entity.isEmpty())
             throw new DataNotFoundException("Region was not found");
@@ -23,7 +23,7 @@ public class RegionServiceImpl implements RegionService{
     }
 
     @Override
-    public RegionEntity update(RegionDTO request) {
+    public RegionEntity update(RegionDTO request) throws DataNotFoundException {
         RegionEntity entity = get(request.getId());
         entity.setNameOz(request.getNameOz());
         entity.setNameRu(request.getNameRu());

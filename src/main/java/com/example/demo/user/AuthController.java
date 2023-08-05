@@ -1,6 +1,7 @@
 package com.example.demo.user;
 
 import com.example.demo.exceptions.DataNotFoundException;
+import com.example.demo.exceptions.UserAlreadyExistException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class AuthController {
     }
 //    @PreAuthorize("hasAnyRole('ROLE_SUPERADMIN')")
     @PostMapping("/sign_up")
-    public ResponseEntity<AuthResponse> signIn(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) throws NoSuchAlgorithmException {
+    public ResponseEntity<AuthResponse> signIn(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) throws NoSuchAlgorithmException, DataNotFoundException, UserAlreadyExistException {
         logger.debug("request = " + request.getRemoteAddr());
         logger.debug("request = " + request.getRemoteHost());
         logger.debug("request = " + request.getLocalAddr());

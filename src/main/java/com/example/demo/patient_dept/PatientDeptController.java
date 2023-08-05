@@ -1,6 +1,7 @@
 package com.example.demo.patient_dept;
 
 import com.example.demo.configuration.SwaggerUI;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class PatientDeptController {
 
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<PatientDeptDto> save(@RequestBody PatientDeptRequest request){
+    public ResponseEntity<PatientDeptDto> save(@RequestBody PatientDeptRequest request) throws DataNotFoundException {
         return new ResponseEntity<>(patientDeptmapper.toDto(patientDeptService.save(request)), HttpStatus.OK);
     }
     @GetMapping("/all")
@@ -34,12 +35,12 @@ public class PatientDeptController {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<PatientDeptDto> update(@Valid @RequestBody PatientDeptRequest obj){
+    public ResponseEntity<PatientDeptDto> update(@Valid @RequestBody PatientDeptRequest obj) throws DataNotFoundException {
         return ResponseEntity.ok().body(patientDeptmapper.toDto(patientDeptService.update(obj)));
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<PatientDeptDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<PatientDeptDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(patientDeptmapper.toDto(patientDeptService.get(id)));
     }
     @DeleteMapping("/delete/{id}")

@@ -31,7 +31,7 @@ public class WorkerExpenseServiceImpl implements WorkerExpenseService {
     }
 
     @Override
-    public WorkerExpenseEntity save(WorkerExpenseRequest request, UserEntity user) {
+    public WorkerExpenseEntity save(WorkerExpenseRequest request, UserEntity user) throws DataNotFoundException {
         logger.info("Saving new expense {} to db",request.getSum());
         return getReadyEntity(request,user);
     }
@@ -56,13 +56,13 @@ public class WorkerExpenseServiceImpl implements WorkerExpenseService {
     }
 
     @Override
-    public WorkerExpenseEntity update(WorkerExpenseRequest obj) {
+    public WorkerExpenseEntity update(WorkerExpenseRequest obj) throws DataNotFoundException {
         logger.info("Updated Expense {} ",obj.getId());
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
           return getReadyEntity(obj,userDetails.getUserEntity());
     }
 
-    private WorkerExpenseEntity getReadyEntity(WorkerExpenseRequest obj,UserEntity user){
+    private WorkerExpenseEntity getReadyEntity(WorkerExpenseRequest obj,UserEntity user) throws DataNotFoundException {
         WorkerExpenseEntity expense=null;
         if (obj.getId()==null)
              expense = new WorkerExpenseEntity();
@@ -78,7 +78,7 @@ public class WorkerExpenseServiceImpl implements WorkerExpenseService {
         expense.setSum(obj.getSum());
         expense.setCompany(user.getCompany());
         expense.setDescription(obj.getDescription());
-        expense.setWorker(workerService.get(obj.getWokerId()));
+        expense.setWorker(workerService.findById(obj.getWokerId()));
         return workerExpenseRepository.save(expense);
     }
 }

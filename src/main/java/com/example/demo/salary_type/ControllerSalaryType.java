@@ -1,6 +1,7 @@
 package com.example.demo.salary_type;
 
 import com.example.demo.configuration.SwaggerUI;
+import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.salary_type.SalaryTypeService;
 import com.example.demo.salary_type.SalaryTypemapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ public class ControllerSalaryType {
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<SalaryTypeDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<SalaryTypeDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(salaryTypemapper.toDto(salaryService.get(id)));
     }
 

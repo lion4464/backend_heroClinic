@@ -15,7 +15,7 @@ public class DestrictServiceImpl implements DestrictService{
         }
 
     @Override
-    public DestrictEntity get(Long id) {
+    public DestrictEntity get(Long id) throws DataNotFoundException {
         Optional<DestrictEntity> entity = destrictRepository.findById(id);
         if (entity.isEmpty())
             throw new DataNotFoundException("Destrict was not found");
@@ -23,7 +23,7 @@ public class DestrictServiceImpl implements DestrictService{
     }
 
     @Override
-    public DestrictEntity update(DestrictDTO request) {
+    public DestrictEntity update(DestrictDTO request) throws DataNotFoundException {
         DestrictEntity entity = get(request.getId());
         entity.setNameOz(request.getNameOz());
         entity.setNameRu(request.getNameRu());

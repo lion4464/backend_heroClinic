@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RoomService {
-    RoomEntity save(UserEntity user,RoomRequest request) throws NonUniqueResultException;
+    RoomEntity save(UserEntity user,RoomRequest request) throws NonUniqueResultException, DataNotFoundException;
     RoomEntity get(UserEntity user,UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<RoomEntity> all(UserEntity user,DataStatusEnum status);
 
-    RoomEntity update(RoomRequest obj,UserEntity user);
+    RoomEntity update(RoomRequest obj,UserEntity user) throws DataNotFoundException;
 
-    void changedSumIfRoomTypeSumChanged(UUID roomId, UUID roomType,UUID workerId,UserEntity user);
+    void changedSumIfRoomTypeSumChanged(UUID roomId, UUID roomType,UUID workerId,UserEntity user) throws DataNotFoundException;
 
     List<RoomEntity> getByRoomTypeId(UserEntity user, UUID roomTypeId);
 }

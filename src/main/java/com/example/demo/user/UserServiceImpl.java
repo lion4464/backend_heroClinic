@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
-    private UserEntity saveUser(String username, String firstName, String lastName, String password, String phone, DataStatusEnum active, String role, UUID companyId) throws NoSuchAlgorithmException {
+    private UserEntity saveUser(String username, String firstName, String lastName, String password, String phone, DataStatusEnum active, String role, UUID companyId) throws NoSuchAlgorithmException, DataNotFoundException {
         logger.info("User save {}", username);
         UserEntity userEntity = new UserEntity();
         CompanyEntity companyEntity = companyService.get(companyId);
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException, UserAlreadyExistException {
+    public AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException, UserAlreadyExistException, DataNotFoundException {
         Optional<UserEntity> optional = userRepository.findByUsername(signUpRequest.getUsername());
         if (optional.isPresent()) {
             throw new UserAlreadyExistException("name_is_already_exists");

@@ -2,6 +2,8 @@ package com.example.demo.room;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
+import com.example.demo.exceptions.NonUniqueResultException;
 import com.example.demo.generic.DataStatusEnum;
 import com.example.demo.history_room_amount.HistoryRoomDto;
 import com.example.demo.history_room_amount.HistoryRoomService;
@@ -37,7 +39,7 @@ public class RoomController {
 
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoomResponse> save(@Valid @RequestBody RoomRequest request){
+    public ResponseEntity<RoomResponse> save(@Valid @RequestBody RoomRequest request) throws NonUniqueResultException, DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(roomMapper.toDto(roomService.save(userDetails.getUserEntity(),request)), HttpStatus.OK);
     }
@@ -56,14 +58,14 @@ public class RoomController {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoomResponse> update(@Valid @RequestBody RoomRequest obj){
+    public ResponseEntity<RoomResponse> update(@Valid @RequestBody RoomRequest obj) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok().body(roomMapper.toDto(roomService.update(obj,userDetails.getUserEntity())));
     }
 
     @GetMapping("/get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoomResponse> get(@PathVariable("id") UUID id){
+    public ResponseEntity<RoomResponse> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok().body(roomMapper.toDto(roomService.get(userDetails.getUserEntity(),id)));
     }

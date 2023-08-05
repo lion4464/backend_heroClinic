@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CashierService {
-    CashierEntity save(CashierRequest request);
+    CashierEntity save(CashierRequest request) throws DataNotFoundException;
     CashierEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<CashierEntity> all(UserEntity user);
-    CashierEntity update(CashierRequest obj);
+    CashierEntity update(CashierRequest obj) throws DataNotFoundException;
     Float summAllPaymentsByPatient(UserEntity user, UUID id);
 
     HashMap<String,Float> getPatientDept(UserEntity user,UUID patientid);

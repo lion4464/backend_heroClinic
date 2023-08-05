@@ -39,7 +39,7 @@ public class AnalysesServiceImpl  extends JpaGenericServiceImpl<AnalysesEntity, 
 
     @Override
     public AnalysesEntity saveAnalyse(UserEntity user,AnalysesRequest request) throws DataNotFoundException {
-        WorkersEntity worker = workerService.get(request.getWorkerId());
+        WorkersEntity worker = workerService.findById(request.getWorkerId());
         AnalysesEntity entity = new AnalysesEntity();
         entity.setName(request.getName());
         entity.setPayAmount(request.getPayAmount());
@@ -62,7 +62,7 @@ public class AnalysesServiceImpl  extends JpaGenericServiceImpl<AnalysesEntity, 
         Optional<AnalysesEntity> entity = analysesRepository.findById(obj.getId());
         if (entity.isEmpty())
             throw new DataNotFoundException(obj.getId()+"Analyse isn't not found");
-        WorkersEntity worker = workerService.get(obj.getWorkerId());
+        WorkersEntity worker = workerService.findById(obj.getWorkerId());
         AnalysesEntity realEntity = entity.get();
         realEntity.setName(obj.getName());
         realEntity.setModifiedDate(getMillisecondNow());
@@ -87,7 +87,7 @@ public class AnalysesServiceImpl  extends JpaGenericServiceImpl<AnalysesEntity, 
         int i=0;
             for (AnalysesRequest entity:objList) {
                 if (!entity.getPayAmount().equals(analysesEntityList.get(i).getPayAmount()) ){
-                    WorkersEntity worker = workerService.get(entity.getWorkerId());
+                    WorkersEntity worker = workerService.findById(entity.getWorkerId());
                 HistoryAnalysesEntity historyAnalysesEntity = new HistoryAnalysesEntity();
                 historyAnalysesEntity.setAmount(entity.getPayAmount());
                 historyAnalysesEntity.setAnalyse(analysesEntityList.get(i));

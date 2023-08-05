@@ -1,8 +1,11 @@
 package com.example.demo.patients;
 
+import com.example.demo.analyses.AnalysesEntity;
 import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.exceptions.DataNotFoundException;
 
+import com.example.demo.generic.JpaGenericRepository;
+import com.example.demo.generic.JpaGenericServiceImpl;
 import com.example.demo.user.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class PatientServiceImpl implements PatientService{
+public class PatientServiceImpl   extends JpaGenericServiceImpl<PatientEntity, UUID> implements PatientService{
 
     private final PatientRepo patientRepo;
 
@@ -32,14 +35,11 @@ public class PatientServiceImpl implements PatientService{
         return patientRepo.save(obj);
     }
 
-    public PatientEntity update(PatientEntity obj){
-        getId(obj.getId());
+    public PatientEntity update(PatientEntity obj) throws DataNotFoundException {
+        findById(obj.getId());
         return patientRepo.save(obj);
     }
-    public String delete(UUID id) {
-      patientRepo.deleteById(id);
-      return "Successfully removed";
-    }
+
 
     public Page<PatientEntity> all(Specification<PatientEntity> spec,Pageable page){
        return patientRepo.findAll(spec,
@@ -47,4 +47,8 @@ public class PatientServiceImpl implements PatientService{
     }
 
 
+    @Override
+    protected JpaGenericRepository<PatientEntity, UUID> getRepository() {
+        return patientRepo;
+    }
 }

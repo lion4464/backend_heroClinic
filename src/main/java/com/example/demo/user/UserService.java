@@ -11,10 +11,10 @@ import java.util.UUID;
 
 
 public interface UserService {
-UserEntity getUser(String username);
+UserEntity getUser(String username) throws DataNotFoundException;
 List<HashMap<String,Object>> getAllUsers(UserEntity user, DataStatusEnum status);
 AuthResponse signIn(SignInRequest signInRequest);
-AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException, UserAlreadyExistException;
+AuthResponse signUp(SignUpRequest signUpRequest) throws NoSuchAlgorithmException, UserAlreadyExistException, DataNotFoundException;
 UserEntity findById(UUID userId) throws DataNotFoundException;
 
     void logout(TokensRequest tokensRequest);

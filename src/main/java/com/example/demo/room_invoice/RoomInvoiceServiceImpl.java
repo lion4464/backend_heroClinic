@@ -1,5 +1,6 @@
 package com.example.demo.room_invoice;
 
+import com.example.demo.analyses.AnalysesEntity;
 import com.example.demo.cashier.CashierService;
 import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.department.DepartmentEntity;
@@ -7,6 +8,8 @@ import com.example.demo.department.DepartmentService;
 import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.exceptions.StatusInactiveException;
 import com.example.demo.generic.DataStatusEnum;
+import com.example.demo.generic.JpaGenericRepository;
+import com.example.demo.generic.JpaGenericServiceImpl;
 import com.example.demo.patient_dept.PatientDeptEntity;
 import com.example.demo.patient_dept.PatientDeptRequest;
 import com.example.demo.patient_dept.PatientDeptService;
@@ -33,7 +36,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 @Service
-public class RoomInvoiceServiceImpl implements RoomInvoiceService {
+public class RoomInvoiceServiceImpl   extends JpaGenericServiceImpl<RoomInvoiceEntity, UUID> implements RoomInvoiceService {
     private final DepartmentService departmentService;
     private final WorkerService workerService;
     private final PatientService patientService;
@@ -56,19 +59,15 @@ public class RoomInvoiceServiceImpl implements RoomInvoiceService {
     }
 
     @Override
-    public RoomInvoiceEntity update(RoomInvoiceRequest obj) throws IllegalArgumentException {
+    public RoomInvoiceEntity updateRoomInvoiceE(RoomInvoiceRequest obj) throws IllegalArgumentException, DataNotFoundException, StatusInactiveException {
         get(obj.getId());
         return roomRepository.save(getReadyEntity(obj));
     }
 
-    @Override
-    public String delete(UUID id) {
-        roomRepository.deleteById(id);
-        return "Successfully removed";
-    }
+
 
     @Override
-    public RoomInvoiceEntity get(UUID id) {
+    public RoomInvoiceEntity get(UUID id) throws DataNotFoundException {
         Optional<RoomInvoiceEntity> optional = roomRepository.findById(id);
         if (optional.isEmpty())
             throw new DataNotFoundException("Room invoice can't found :/");
@@ -76,7 +75,7 @@ public class RoomInvoiceServiceImpl implements RoomInvoiceService {
     }
 
     @Override
-    public RoomInvoiceEntity save(RoomInvoiceRequest obj) {
+    public RoomInvoiceEntity saveRoomInvoiceE(RoomInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
         RoomInvoiceEntity entity = getReadyEntity(obj);
          roomRepository.save(entity);
         logger.info("New  Room Invice created ))");
@@ -93,15 +92,15 @@ public class RoomInvoiceServiceImpl implements RoomInvoiceService {
     }
 
 
-    private RoomInvoiceEntity getReadyEntity(RoomInvoiceRequest obj){
+    private RoomInvoiceEntity getReadyEntity(RoomInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
          RoomPlaceEntity roomPlace = roomPlaceService.get(obj.getRoomPlaceId());
          RoomEntity room = roomPlace.getRoom();
-        WorkersEntity worker = workerService.get(obj.getWorkerId());
+        WorkersEntity worker = workerService.findById(obj.getWorkerId());
         if (worker.getStatus().equals(DataStatusEnum.INACTIVE))
             throw new StatusInactiveException("Worker status is INACTIVE");
 
         DepartmentEntity department = departmentService.get(worker.getDepartmentId());
-        PatientEntity patient = patientService.getId(obj.getPatientId());
+        PatientEntity patient = patientService.findById(obj.getPatientId());
 
         RoomInvoiceEntity entity;
         if (obj.getId()==null)
@@ -174,5 +173,10 @@ public class RoomInvoiceServiceImpl implements RoomInvoiceService {
 
     private Float getAmountAfterDiscount(Float reviewAmount, Integer discount) {
         return ((100-discount)*reviewAmount)/100;
+    }
+
+    @Override
+    protected JpaGenericRepository<RoomInvoiceEntity, UUID> getRepository() {
+        return roomRepository;
     }
 }

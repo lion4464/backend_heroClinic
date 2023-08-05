@@ -51,7 +51,7 @@ public class ExpenseTemplateServiceImpl implements ExpenseTemplateService {
     }
 
     @Override
-    public ExpenseTemplateEntity update(ExpenseTemplateRequest obj) {
+    public ExpenseTemplateEntity update(ExpenseTemplateRequest obj) throws DataNotFoundException {
         logger.info("Updated Expense Template {} ",obj.getName());
         Optional<ExpenseTemplateEntity> entity= expenseTemplateRepository.findById(obj.getId());
         if (entity.isEmpty())

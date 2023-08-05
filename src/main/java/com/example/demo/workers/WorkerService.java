@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface WorkerService extends JpaGenericService<WorkersEntity, UUID> {
-    WorkersEntity saveWorker(WorkerRequest request);
+    WorkersEntity saveWorker(WorkerRequest request) throws DataNotFoundException;
     List<WorkersEntity> findAllInactiveStatus(UserEntity user);
     List<WorkersEntity> findAllActiveStatus(UserEntity user);
     WorkersEntity updateWorker(WorkerRequest obj) throws DataNotFoundException;
