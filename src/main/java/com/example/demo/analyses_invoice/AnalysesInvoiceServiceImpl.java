@@ -7,6 +7,8 @@ import com.example.demo.department.DepartmentService;
 import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.exceptions.StatusInactiveException;
 import com.example.demo.generic.DataStatusEnum;
+import com.example.demo.generic.JpaGenericRepository;
+import com.example.demo.generic.JpaGenericServiceImpl;
 import com.example.demo.patients.PatientEntity;
 import com.example.demo.patients.PatientService;
 import com.example.demo.user.UserEntity;
@@ -24,7 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 @Service
-public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
+public class AnalysesInvoiceServiceImpl extends JpaGenericServiceImpl<AnalysesInvoiceEntity, UUID>  implements AnalysesInvoiceService{
     private final DepartmentService departmentService;
     private final WorkerService workerService;
     private final PatientService patientService;
@@ -43,19 +45,15 @@ public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
     }
 
     @Override
-    public AnalysesInvoiceEntity update(AnalysesInvoiceRequest obj) {
+    public AnalysesInvoiceEntity updateAnalysesInvoice(AnalysesInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
         get(obj.getId());
         return analysesInvoiceRepository.save(getReadyEntity(obj));
     }
 
-    @Override
-    public String delete(UUID id) {
-        analysesInvoiceRepository.deleteById(id);
-        return "Successfully removed";
-    }
+
 
     @Override
-    public AnalysesInvoiceEntity get(UUID id) {
+    public AnalysesInvoiceEntity get(UUID id) throws DataNotFoundException {
         Optional<AnalysesInvoiceEntity> optional = analysesInvoiceRepository.findById(id);
         if (optional.isEmpty())
             throw new DataNotFoundException("Analyse invoice invoice can't found :/");
@@ -63,7 +61,7 @@ public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
     }
 
     @Override
-    public AnalysesInvoiceEntity save(AnalysesInvoiceRequest obj) {
+    public AnalysesInvoiceEntity saveAnalysesInvoice(AnalysesInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
         AnalysesInvoiceEntity entity = getReadyEntity(obj);
          analysesInvoiceRepository.save(entity);
         logger.info("New  Analyse Invice created ))");
@@ -72,9 +70,19 @@ public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
     }
 
     @Override
-    public List<AnalysesInvoiceEntity> saveAll(List<AnalysesInvoiceRequest> objList) {
+    public List<AnalysesInvoiceEntity> saveAll(List<AnalysesInvoiceRequest> objList)
+    {
 
-        List<AnalysesInvoiceEntity> entityList = objList.stream().map(analysesInvoiceRequest -> getReadyEntity(analysesInvoiceRequest)).collect(Collectors.toList());
+        List<AnalysesInvoiceEntity> entityList = new ArrayList<>();
+        for (AnalysesInvoiceRequest analysesInvoiceRequest : objList) {
+            try {
+                entityList.add(getReadyEntity(analysesInvoiceRequest));
+            } catch (DataNotFoundException e) {
+                e.getMessage();
+            } catch (StatusInactiveException e) {
+                e.getMessage();
+            }
+        }
 
         analysesInvoiceRepository.saveAll(entityList);
         return entityList;
@@ -89,13 +97,13 @@ public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
     }
 
 
-    private AnalysesInvoiceEntity getReadyEntity(AnalysesInvoiceRequest obj){
-        AnalysesEntity analyses = analysesService.get(obj.getAnalyseId());
-        WorkersEntity worker =workerService.get(analyses.getWorkerId());
+    private AnalysesInvoiceEntity getReadyEntity(AnalysesInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
+        AnalysesEntity analyses = analysesService.findById(obj.getAnalyseId());
+        WorkersEntity worker =workerService.findById(analyses.getWorkerId());
         if (worker.getStatus().equals(DataStatusEnum.INACTIVE))
             throw new StatusInactiveException("Worker status is INACTIVE");
         DepartmentEntity department = departmentService.get(worker.getDepartmentId());
-        PatientEntity patient = patientService.getId(obj.getPatientId());
+        PatientEntity patient = patientService.findById(obj.getPatientId());
 
         AnalysesInvoiceEntity entity;
         if (obj.getId()==null)
@@ -132,14 +140,19 @@ public class AnalysesInvoiceServiceImpl implements AnalysesInvoiceService{
 
     //berilgan vaqtlar oralig'idagi
     @Override
-    public List<AnalyseInvoiseCounterDto> getCountInvoicesBetweenDates(UserEntity user,Date time1, Date time2) {
+    public List<AnalyseInvoiseCounterDto> getCountInvoicesBetweenDates(UserEntity user,Date time1, Date time2) throws DataNotFoundException {
         List<AnalyseInvoiseCounterDto> counts2=new ArrayList<>();
         List<IAnalyseInvoiceCount> counts=analysesInvoiceRepository.groupByInvoicesBetweenTwoDateWhereCompanyId(user.getCompanyId(),time1.getTime(),time2.getTime()+86399999);
        for (int i=0;i<counts.size();i++)
        {
-           counts2.add(new AnalyseInvoiseCounterDto(counts.get(i).getCounts(),workerMapper.toDto(workerService.get(counts.get(i).getWorkerId()))));
+           counts2.add(new AnalyseInvoiseCounterDto(counts.get(i).getCounts(),workerMapper.toDto(workerService.findById(counts.get(i).getWorkerId()))));
        }
         return counts2;
 
+    }
+
+    @Override
+    protected JpaGenericRepository<AnalysesInvoiceEntity, UUID> getRepository() {
+        return analysesInvoiceRepository;
     }
 }

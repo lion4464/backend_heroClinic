@@ -12,6 +12,6 @@ public interface ExpenseTemplateService {
     ExpenseTemplateEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<ExpenseTemplateEntity> all(UserEntity user);
-    ExpenseTemplateEntity update(ExpenseTemplateRequest obj);
+    ExpenseTemplateEntity update(ExpenseTemplateRequest obj) throws DataNotFoundException;
 
 }

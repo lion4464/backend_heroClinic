@@ -1,6 +1,7 @@
 package com.example.demo.districts;
 
 import com.example.demo.configuration.SwaggerUI;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class DestrictController {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<DestrictDTO> update(@Valid @RequestBody DestrictDTO obj){
+    public ResponseEntity<DestrictDTO> update(@Valid @RequestBody DestrictDTO obj) throws DataNotFoundException {
         return ResponseEntity.ok().body(destrictMapper.fromEntity(destrictService.update(obj)));
     }
 }

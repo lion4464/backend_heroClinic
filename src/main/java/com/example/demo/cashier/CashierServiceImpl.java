@@ -28,9 +28,9 @@ public class CashierServiceImpl implements CashierService {
         this.patientDeptService = patientDeptService;
     }
 
-    public CashierEntity save(CashierRequest request) {
+    public CashierEntity save(CashierRequest request) throws DataNotFoundException {
         logger.info("Saving new Cashier {} to db", request.getSum());
-        PatientEntity patient = patientService.getId(request.getPatientId());
+        PatientEntity patient = patientService.findById(request.getPatientId());
         CashierEntity cashierEntity = new CashierEntity();
         cashierEntity.setSum(request.getSum());
         cashierEntity.setPaymentType((request.getPaymentType() == null) ? PaymentType.CASH : request.getPaymentType());
@@ -58,11 +58,11 @@ public class CashierServiceImpl implements CashierService {
     }
 
     @Override
-    public CashierEntity update(CashierRequest obj) {
+    public CashierEntity update(CashierRequest obj) throws DataNotFoundException {
         Optional<CashierEntity> optional = cashierRepository.findById(obj.getId());
         if (optional.isEmpty())
             throw new DataNotFoundException(obj.getId() + " isn't not found in Casheir");
-        PatientEntity patient = patientService.getId(obj.getPatientId());
+        PatientEntity patient = patientService.findById(obj.getPatientId());
         CashierEntity entity = optional.get();
         entity.setPaymentType(obj.getPaymentType());
         entity.setSum(obj.getSum());

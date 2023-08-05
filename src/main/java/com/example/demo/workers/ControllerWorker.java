@@ -2,6 +2,7 @@ package com.example.demo.workers;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.history_worker_salary.HistoryWorkerSalaryDto;
 import com.example.demo.history_worker_salary.HistoryWorkerSalaryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +32,8 @@ public class ControllerWorker {
     }
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<WorkerFullDTO> save(@Valid @RequestBody WorkerRequest request){
-        return new ResponseEntity<>(workerMapper.toDto(workerService.save(request)), HttpStatus.OK);
+    public ResponseEntity<WorkerFullDTO> save(@Valid @RequestBody WorkerRequest request) throws DataNotFoundException {
+        return new ResponseEntity<>(workerMapper.toDto(workerService.saveWorker(request)), HttpStatus.OK);
     }
     @GetMapping("/all_active_status")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
@@ -53,17 +54,18 @@ public class ControllerWorker {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<WorkerFullDTO> update(@Valid @RequestBody WorkerRequest obj){
-        return ResponseEntity.ok().body(workerMapper.toDto(workerService.update(obj)));
+    public ResponseEntity<WorkerFullDTO> update(@Valid @RequestBody WorkerRequest obj) throws DataNotFoundException {
+        return ResponseEntity.ok().body(workerMapper.toDto(workerService.updateWorker(obj)));
     }
     @GetMapping("/get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<WorkerFullDTO> get(@PathVariable("id") UUID id){
-        return ResponseEntity.ok().body(workerMapper.toDto(workerService.get(id)));
+    public ResponseEntity<WorkerFullDTO> get(@PathVariable("id") UUID id) throws DataNotFoundException {
+        return ResponseEntity.ok().body(workerMapper.toDto(workerService.findById(id)));
     }
     @DeleteMapping("/delete/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<String> delete(@PathVariable("id") UUID id){
-        return ResponseEntity.ok(workerService.delete(id));
+        workerService.delete(id);
+        return ResponseEntity.ok("OK");
     }
 }

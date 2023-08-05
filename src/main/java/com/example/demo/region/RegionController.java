@@ -1,6 +1,7 @@
 package com.example.demo.region;
 
 import com.example.demo.configuration.SwaggerUI;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class RegionController {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RegionDTO> update(@Valid @RequestBody RegionDTO obj){
+    public ResponseEntity<RegionDTO> update(@Valid @RequestBody RegionDTO obj) throws DataNotFoundException {
         return ResponseEntity.ok().body(regionMapper.fromEntity(regionService.update(obj)));
     }
 }

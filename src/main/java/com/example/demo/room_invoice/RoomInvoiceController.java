@@ -2,6 +2,8 @@ package com.example.demo.room_invoice;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
+import com.example.demo.exceptions.StatusInactiveException;
 import com.example.demo.generic.PageableRequest;
 import com.example.demo.generic.UUIDSpecification;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,18 +37,18 @@ public class RoomInvoiceController {
     }
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoomInvoiceResponse> save(@Valid @RequestBody RoomInvoiceRequest request){
-        return new ResponseEntity<>(roomInvoiceMapper.toDto(roomInvoiceService.save(request)), HttpStatus.OK);
+    public ResponseEntity<RoomInvoiceResponse> save(@Valid @RequestBody RoomInvoiceRequest request) throws DataNotFoundException, StatusInactiveException {
+        return new ResponseEntity<>(roomInvoiceMapper.toDto(roomInvoiceService.saveRoomInvoiceE(request)), HttpStatus.OK);
     }
 
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoomInvoiceResponse> update(@Valid @RequestBody RoomInvoiceRequest obj) throws IllegalArgumentException{
-        return ResponseEntity.ok().body(roomInvoiceMapper.toDto(roomInvoiceService.update(obj)));
+    public ResponseEntity<RoomInvoiceResponse> update(@Valid @RequestBody RoomInvoiceRequest obj) throws IllegalArgumentException, DataNotFoundException, StatusInactiveException {
+        return ResponseEntity.ok().body(roomInvoiceMapper.toDto(roomInvoiceService.updateRoomInvoiceE(obj)));
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoomInvoiceResponse> get(@PathVariable("id") UUID id){
+    public ResponseEntity<RoomInvoiceResponse> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(roomInvoiceMapper.toDto(roomInvoiceService.get(id)));
     }
     @PostMapping("/pageable")
@@ -60,13 +62,14 @@ public class RoomInvoiceController {
         );
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return ResponseEntity.ok(roomInvoiceConvertor.createFromEntities(roomInvoiceService.all(
+        return ResponseEntity.ok(roomInvoiceMapper.toDtoPage(roomInvoiceService.findAll(
                 new SearchSpecification(pageable.getSearch())
                         .and(new UUIDSpecification<>("companyId",userDetails.getUserEntity().getCompanyId())), pageRequest)));
     }
     @DeleteMapping("/delete/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<String> delete(@PathVariable("id") UUID id){
-        return ResponseEntity.ok(roomInvoiceService.delete(id));
+        roomInvoiceService.delete(id);
+        return ResponseEntity.ok("OK");
     }   
 }

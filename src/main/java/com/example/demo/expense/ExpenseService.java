@@ -8,10 +8,10 @@ import java.util.UUID;
 
 
 public interface ExpenseService {
-    ExpenseEntity save(UserEntity user,ExpenseRequest request);
+    ExpenseEntity save(UserEntity user,ExpenseRequest request) throws DataNotFoundException;
     ExpenseEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<ExpenseEntity> all(UserEntity user);
-    ExpenseEntity update(UserEntity user,ExpenseRequest obj);
+    ExpenseEntity update(UserEntity user,ExpenseRequest obj) throws DataNotFoundException;
 
 }

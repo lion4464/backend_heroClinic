@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditGeneric<U> {
+public abstract class AuditGeneric<U> implements GenericEntity<U> {
 
     @CreatedBy
     @Column(name = "created_by", length = 50, updatable = false)

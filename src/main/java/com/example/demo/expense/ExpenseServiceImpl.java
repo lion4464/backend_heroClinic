@@ -26,7 +26,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseEntity save(UserEntity user,ExpenseRequest request) {
+    public ExpenseEntity save(UserEntity user,ExpenseRequest request) throws DataNotFoundException {
         logger.info("Saving new expense {} to db",request.getSum());
         return getReadyEntity(user,request);
     }
@@ -51,12 +51,12 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseEntity update(UserEntity user,ExpenseRequest obj) {
+    public ExpenseEntity update(UserEntity user,ExpenseRequest obj) throws DataNotFoundException {
         logger.info("Updated Expense {} ",obj.getId());
           return getReadyEntity(user,obj);
     }
 
-    private ExpenseEntity getReadyEntity(UserEntity user,ExpenseRequest obj){
+    private ExpenseEntity getReadyEntity(UserEntity user,ExpenseRequest obj) throws DataNotFoundException {
         ExpenseEntity expense=null;
         if (obj.getId()==null)
              expense = new ExpenseEntity();

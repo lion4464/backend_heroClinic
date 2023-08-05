@@ -3,6 +3,7 @@ package com.example.demo.review_invoice;
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
 import com.example.demo.exceptions.DataNotFoundException;
+import com.example.demo.exceptions.StatusInactiveException;
 import com.example.demo.generic.PageableRequest;
 import com.example.demo.generic.UUIDSpecification;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,20 +40,20 @@ public class ReviewInvoiceController {
 
     @GetMapping("/get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<ReviewInvoiceDTO> getid(@PathVariable("id") UUID id) {
+    public ResponseEntity<ReviewInvoiceDTO> getid(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok(reviewInvoicemapper.toDto(reviewInvoiceService.getId(id)));
     }
 
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<ReviewInvoiceDTO> insert(@Valid @RequestBody ReviewInvoiceRequest obj) throws DataNotFoundException {
+    public ResponseEntity<ReviewInvoiceDTO> insert(@Valid @RequestBody ReviewInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(reviewInvoicemapper.toDto(reviewInvoiceService.save(obj,userDetails.getUserEntity())));
     }
 
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<ReviewInvoiceDTO> update(@Valid @RequestBody ReviewInvoiceRequest obj) {
+    public ResponseEntity<ReviewInvoiceDTO> update(@Valid @RequestBody ReviewInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
         return ResponseEntity.ok(reviewInvoicemapper.toDto(reviewInvoiceService.update(obj)));
     }
 
@@ -82,7 +83,7 @@ public class ReviewInvoiceController {
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<List<ReviewInvoiceCount>> getCountReviews(
             @RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
-            @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date to) {
+            @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date to) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(reviewInvoiceService.getReviewsCount(from, to,userDetails.getUserEntity()));
     }

@@ -12,6 +12,6 @@ public interface DepartmentService{
     DepartmentEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<DepartmentEntity> all(UserEntity user);
-    DepartmentEntity update(DepartmentRequest obj);
+    DepartmentEntity update(DepartmentRequest obj) throws DataNotFoundException;
 
 }

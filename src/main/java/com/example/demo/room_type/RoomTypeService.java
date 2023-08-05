@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RoomTypeService {
-    RoomTypeEntity save(RoomTypeDTO request,UserEntity user);
+    RoomTypeEntity save(RoomTypeDTO request,UserEntity user) throws DataNotFoundException;
     RoomTypeEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<RoomTypeEntity> all(UserEntity user);
-    RoomTypeEntity update(RoomTypeDTO obj,UserEntity user);
+    RoomTypeEntity update(RoomTypeDTO obj,UserEntity user) throws DataNotFoundException;
 
     HashMap<String, RoomTypeEntity> getIssetRoomTypes(UserEntity userEntity);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.room_invoice;
 
+import com.example.demo.generic.GenericAuditMapper;
 import com.example.demo.patient_dept.PatientDeptEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -9,7 +10,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 @Mapper(componentModel = "spring",nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
-public interface RoomInvoiceMapper {
+public interface RoomInvoiceMapper extends GenericAuditMapper<RoomInvoiceEntity,RoomInvoiceResponse> {
     @Named("patientAllDept")
     static Float patientAllDept(PatientDeptEntity patientDept) {
         return patientDept.getSum();

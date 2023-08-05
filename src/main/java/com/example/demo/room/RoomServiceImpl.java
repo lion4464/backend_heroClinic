@@ -48,7 +48,7 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public RoomEntity save(UserEntity user, RoomRequest request) {
+    public RoomEntity save(UserEntity user, RoomRequest request) throws NonUniqueResultException, DataNotFoundException {
         RoomEntity result = getReadyEntity(user,request);
         return result;
     }
@@ -74,13 +74,19 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public List<RoomEntity> all(UserEntity user,DataStatusEnum status) {
        List<RoomEntity> roomEntityList = roomRepository.findAllByStatusAndCompanyId(status,user.getCompanyId());
-        roomEntityList.forEach(roomEntity->{roomEntity.setFreePlace(get(user,roomEntity.getId()).getFreePlace());});
+        roomEntityList.forEach(roomEntity->{
+            try {
+                roomEntity.setFreePlace(get(user,roomEntity.getId()).getFreePlace());
+            } catch (DataNotFoundException e) {
+                e.getMessage();
+            }
+        });
         return roomEntityList;
     }
 
 
     @Override
-    public RoomEntity update(RoomRequest obj,UserEntity user) {
+    public RoomEntity update(RoomRequest obj,UserEntity user) throws DataNotFoundException {
         RoomEntity entity = get(user,obj.getId());
         RoomTypeEntity roomType = roomTypeService.get(obj.getRoomTypeId());
 
@@ -92,18 +98,24 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public void changedSumIfRoomTypeSumChanged(UUID roomId, UUID roomType,UUID workerId,UserEntity user) {
+    public void changedSumIfRoomTypeSumChanged(UUID roomId, UUID roomType,UUID workerId,UserEntity user) throws DataNotFoundException {
         update(new RoomRequest(roomId,roomType,DataStatusEnum.ACTIVE,workerId),user);
     }
 
     @Override
     public List<RoomEntity> getByRoomTypeId(UserEntity user, UUID roomTypeId) {
         List<RoomEntity> roomEntityList = roomRepository.findAllByCompanyIdAndRoomTypeId(user.getCompanyId(),roomTypeId);
-        roomEntityList.forEach(roomEntity->{roomEntity.setFreePlace(get(user,roomEntity.getId()).getFreePlace());});
+        roomEntityList.forEach(roomEntity->{
+            try {
+                roomEntity.setFreePlace(get(user,roomEntity.getId()).getFreePlace());
+            } catch (DataNotFoundException e) {
+                e.getMessage();
+            }
+        });
         return roomEntityList;
     }
 
-    private RoomEntity getReadyEntity(UserEntity user,RoomRequest request) {
+    private RoomEntity getReadyEntity(UserEntity user,RoomRequest request) throws NonUniqueResultException, DataNotFoundException {
         if (roomRepository.existsRoomEntitiesByNameAndStatus(request.getName(),DataStatusEnum.ACTIVE))
             throw new NonUniqueResultException("name is unique :)");
 
@@ -113,7 +125,7 @@ public class RoomServiceImpl implements RoomService{
         entity.setRoomType(roomType);
         entity.setCapacity(request.getCapacity());
             if ((request.getProtcent().equals(0))) {
-                if (salaryTypeService.get(workerService.get(request.getWorkerId()).getSalaryTypeId()).getName().equals("PROTCENT"))
+                if (salaryTypeService.get(workerService.findById(request.getWorkerId()).getSalaryTypeId()).getName().equals("PROTCENT"))
                     entity.setProtcent(request.getProtcent());
                 else
                     entity.setProtcent(0.0F);
@@ -126,7 +138,7 @@ public class RoomServiceImpl implements RoomService{
         roomRepository.save(entity);
         List<RoomPlaceEntity> roomPlaceEntityList = new ArrayList<>();;
         if (request.getCapacity()>0) {
-            WorkersEntity workers=workerService.get(request.getWorkerId());
+            WorkersEntity workers=workerService.findById(request.getWorkerId());
             for (int i = 1; i <= request.getCapacity(); i++) {
                 RoomPlaceEntity roomPlaceEntity = new RoomPlaceEntity();
                 roomPlaceEntity.setProtcent(entity.getProtcent());
@@ -173,7 +185,7 @@ public class RoomServiceImpl implements RoomService{
            roomRepository.save(entity);
            return entity;
     }
-    private RoomEntity afterChange(RoomRequest request,UserEntity user){
+    private RoomEntity afterChange(RoomRequest request,UserEntity user) throws DataNotFoundException {
         RoomEntity entity = get(user,request.getId());
         entity.setStatus(request.getStatus());
        return roomRepository.save(entity);

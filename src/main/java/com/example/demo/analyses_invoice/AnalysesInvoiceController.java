@@ -3,14 +3,14 @@ package com.example.demo.analyses_invoice;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
+import com.example.demo.exceptions.StatusInactiveException;
 import com.example.demo.generic.PageableRequest;
+import com.example.demo.generic.SearchSpecification;
 import com.example.demo.generic.UUIDSpecification;
-import com.example.demo.workers.WorkerFullDTO;
-import com.example.demo.workers.WorkersEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -40,22 +40,22 @@ public class AnalysesInvoiceController {
     }
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<AnalysesInvoiceResponse> save(@Valid @RequestBody AnalysesInvoiceRequest request){
-        return new ResponseEntity<>(analysesInvoiceMapper.toDto(analysesInvoiceService.save(request)), HttpStatus.OK);
+    public ResponseEntity<AnalysesInvoiceResponse> save(@Valid @RequestBody AnalysesInvoiceRequest request) throws DataNotFoundException, StatusInactiveException {
+        return new ResponseEntity<>(analysesInvoiceMapper.toDto(analysesInvoiceService.saveAnalysesInvoice(request)), HttpStatus.OK);
     }
     @PostMapping("/save-all")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<List<AnalysesInvoiceResponse>> saveAll(@Valid @RequestBody List<AnalysesInvoiceRequest> obj){
+    public ResponseEntity<List<AnalysesInvoiceResponse>> saveAll(@Valid @RequestBody List<AnalysesInvoiceRequest> obj) throws DataNotFoundException, StatusInactiveException {
         return ResponseEntity.ok().body(analysesInvoiceMapper.fromEntityList(analysesInvoiceService.saveAll(obj)));
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<AnalysesInvoiceResponse> update(@Valid @RequestBody AnalysesInvoiceRequest obj){
-        return ResponseEntity.ok().body(analysesInvoiceMapper.toDto(analysesInvoiceService.update(obj)));
+    public ResponseEntity<AnalysesInvoiceResponse> update(@Valid @RequestBody AnalysesInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
+        return ResponseEntity.ok().body(analysesInvoiceMapper.toDto(analysesInvoiceService.updateAnalysesInvoice(obj)));
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<AnalysesInvoiceResponse> get(@PathVariable("id") UUID id){
+    public ResponseEntity<AnalysesInvoiceResponse> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(analysesInvoiceMapper.toDto(analysesInvoiceService.get(id)));
     }
     @PostMapping("/pageable")
@@ -67,16 +67,15 @@ public class AnalysesInvoiceController {
                 Sort.Direction.fromString(pageable.getSort().getDirection()),
                 pageable.getSort().getName()
         );
-        return ResponseEntity.ok(analyseInvoiceConvertor.createFromEntities(analysesInvoiceService.all(
+        return ResponseEntity.ok(analyseInvoiceConvertor.createFromEntities(analysesInvoiceService.findAll(
                 new UUIDSpecification<AnalysesInvoiceEntity>("companyId",userDetails.getUserEntity().getCompanyId())
-                        .and(new SearchSpecification(pageable.getSearch())), pageRequest)
+                        .and(new SearchSpecification<>(pageable.getSearch())), pageRequest)
         ));
     }
 
     @GetMapping("/get_count")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<List<AnalyseInvoiseCounterDto>> getAllInvoicesBetweenDate(@RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date from, @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date to)
-    {
+    public ResponseEntity<List<AnalyseInvoiseCounterDto>> getAllInvoicesBetweenDate(@RequestParam("from") @DateTimeFormat(pattern = "yyyy-MM-dd") Date from, @RequestParam("to") @DateTimeFormat(pattern = "yyyy-MM-dd") Date to) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(analysesInvoiceService.getCountInvoicesBetweenDates(userDetails.getUserEntity(),from,to));
     }
@@ -84,7 +83,8 @@ public class AnalysesInvoiceController {
     @DeleteMapping("/delete/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
     public ResponseEntity<String> delete(@PathVariable("id") UUID id){
-        return ResponseEntity.ok(analysesInvoiceService.delete(id));
+        analysesInvoiceService.delete(id);
+        return ResponseEntity.ok("OK");
     }
 
 }

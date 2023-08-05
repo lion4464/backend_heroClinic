@@ -1,5 +1,7 @@
 package com.example.demo.analyses_invoice;
 
+import com.example.demo.analyses.AnalysesEntity;
+import com.example.demo.generic.JpaGenericRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 @Repository
-public interface AnalysesInvoiceRepository extends JpaRepository<AnalysesInvoiceEntity, UUID> , JpaSpecificationExecutor<AnalysesInvoiceEntity> {
+public interface AnalysesInvoiceRepository  extends JpaGenericRepository<AnalysesInvoiceEntity, UUID> {
 
     @Query(value = "select a.workerId as workerId , count(a.id) as counts from AnalysesInvoiceEntity a  where a.createdDate >= :time1 and a.createdDate <= :time2 and a.companyId= :companyId GROUP BY a.workerId")
     List<IAnalyseInvoiceCount> groupByInvoicesBetweenTwoDateWhereCompanyId(@Param("companyId") UUID companyId,@Param("time1") Long time1, @Param("time2")Long time2);

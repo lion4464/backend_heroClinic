@@ -2,6 +2,7 @@ package com.example.demo.cashier;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.user.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -28,7 +29,7 @@ public class CashierController {
 
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<CashierDto> save(@RequestBody CashierRequest request){
+    public ResponseEntity<CashierDto> save(@RequestBody CashierRequest request) throws DataNotFoundException {
         return new ResponseEntity<>(cashiermapper.toDto(cashierService.save(request)), HttpStatus.OK);
     }
     @GetMapping("/all")
@@ -39,12 +40,12 @@ public class CashierController {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<CashierDto> update(@Valid @RequestBody CashierRequest obj){
+    public ResponseEntity<CashierDto> update(@Valid @RequestBody CashierRequest obj) throws DataNotFoundException {
         return ResponseEntity.ok().body(cashiermapper.toDto(cashierService.update(obj)));
     }
     @GetMapping("/get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<CashierDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<CashierDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(cashiermapper.toDto(cashierService.get(id)));
     }
     @GetMapping("/get_patient_dept/{patientid}")

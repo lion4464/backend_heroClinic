@@ -2,6 +2,7 @@ package com.example.demo.department;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
@@ -41,12 +42,12 @@ public class ControllerDepartment {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)})
-    public ResponseEntity<DepartmentDto> update(@Valid @RequestBody DepartmentRequest obj){
+    public ResponseEntity<DepartmentDto> update(@Valid @RequestBody DepartmentRequest obj) throws DataNotFoundException {
         return ResponseEntity.ok().body(departmentmapper.toDto(departmentService.update(obj)));
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)})
-    public ResponseEntity<DepartmentDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<DepartmentDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(departmentmapper.toDto(departmentService.get(id)));
     }
     @DeleteMapping("/delete/{id}")

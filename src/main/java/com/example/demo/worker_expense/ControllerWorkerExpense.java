@@ -2,6 +2,7 @@ package com.example.demo.worker_expense;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class ControllerWorkerExpense {
 
     @PostMapping("/save")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<WorkerExpenseDto> save(@RequestBody WorkerExpenseRequest request){
+    public ResponseEntity<WorkerExpenseDto> save(@RequestBody WorkerExpenseRequest request) throws DataNotFoundException {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new ResponseEntity<>(workerExpensemapper.toDto(workerExpenseService.save(request,userDetails.getUserEntity())), HttpStatus.OK);
     }
@@ -41,12 +42,12 @@ public class ControllerWorkerExpense {
     }
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<WorkerExpenseDto> update(@Valid @RequestBody WorkerExpenseRequest obj){
+    public ResponseEntity<WorkerExpenseDto> update(@Valid @RequestBody WorkerExpenseRequest obj) throws DataNotFoundException {
         return ResponseEntity.ok().body(workerExpensemapper.toDto(workerExpenseService.update(obj)));
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<WorkerExpenseDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<WorkerExpenseDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(workerExpensemapper.toDto(workerExpenseService.get(id)));
     }
     @DeleteMapping("/delete/{id}")

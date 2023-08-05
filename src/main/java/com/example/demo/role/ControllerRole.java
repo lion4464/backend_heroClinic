@@ -2,6 +2,7 @@ package com.example.demo.role;
 
 import com.example.demo.configuration.SwaggerUI;
 import com.example.demo.configuration.UserDetailsImpl;
+import com.example.demo.exceptions.DataNotFoundException;
 import com.example.demo.patients.PatientDTO;
 import com.example.demo.user.UserDto;
 import com.example.demo.user.UserRequest;
@@ -36,7 +37,7 @@ public class ControllerRole {
     }
     @GetMapping("get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<RoleDto> get(@PathVariable("id") UUID id){
+    public ResponseEntity<RoleDto> get(@PathVariable("id") UUID id) throws DataNotFoundException {
         return ResponseEntity.ok().body(rolemapper.toDto(roleService.get(id)));
     }
 

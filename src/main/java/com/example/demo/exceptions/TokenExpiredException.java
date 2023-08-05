@@ -2,7 +2,7 @@ package com.example.demo.exceptions;
 
 
 
-public class TokenExpiredException extends RuntimeException {
+public class TokenExpiredException extends ApiException {
 
     public TokenExpiredException() {
         super();

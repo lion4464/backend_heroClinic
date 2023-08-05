@@ -1,6 +1,7 @@
 package com.example.demo.analyses;
 
 import com.example.demo.generic.AuditingGeneric;
+import com.example.demo.generic.GenericEntity;
 import com.example.demo.workers.WorkersEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,7 @@ import java.util.UUID;
                 @NamedAttributeNode("worker"),
         }
 )
-public class AnalysesEntity  extends AuditingGeneric<UUID> {
+public class AnalysesEntity  extends AuditingGeneric<UUID>  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id", insertable = false, updatable = false, nullable = false)

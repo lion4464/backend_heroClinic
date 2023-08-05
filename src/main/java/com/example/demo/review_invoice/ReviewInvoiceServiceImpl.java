@@ -39,8 +39,8 @@ public class ReviewInvoiceServiceImpl implements ReviewInvoiceService {
     }
 
     @Override
-    public ReviewInvoiceEntity update(ReviewInvoiceRequest obj) {
-        WorkersEntity worker = workerService.get(obj.getWorkerId());
+    public ReviewInvoiceEntity update(ReviewInvoiceRequest obj) throws DataNotFoundException, StatusInactiveException {
+        WorkersEntity worker = workerService.findById(obj.getWorkerId());
         if (worker.getStatus().equals(DataStatusEnum.INACTIVE))
             throw new StatusInactiveException("Worker status is INACTIVE");
         Optional<ReviewInvoiceEntity> optional = reviewInvoiceRepository.findById(obj.getId());
@@ -49,7 +49,7 @@ public class ReviewInvoiceServiceImpl implements ReviewInvoiceService {
 
         ReviewInvoiceEntity entity = optional.get();
         DepartmentEntity department = departmentService.get(obj.getDepartmentId());
-        PatientEntity patient = patientService.getId(obj.getPatientId());
+        PatientEntity patient = patientService.findById(obj.getPatientId());
 
 
         entity.setWorker(worker);
@@ -74,7 +74,7 @@ public class ReviewInvoiceServiceImpl implements ReviewInvoiceService {
     }
 
     @Override
-    public ReviewInvoiceEntity getId(UUID id) {
+    public ReviewInvoiceEntity getId(UUID id) throws DataNotFoundException {
         Optional<ReviewInvoiceEntity> optional = reviewInvoiceRepository.findById(id);
         if (optional.isEmpty())
             throw new DataNotFoundException("Review invoice can't found :/");
@@ -82,14 +82,14 @@ public class ReviewInvoiceServiceImpl implements ReviewInvoiceService {
     }
 
     @Override
-    public ReviewInvoiceEntity save(ReviewInvoiceRequest obj, UserEntity user) throws DataNotFoundException {
-        WorkersEntity worker = workerService.get(obj.getWorkerId());
+    public ReviewInvoiceEntity save(ReviewInvoiceRequest obj, UserEntity user) throws DataNotFoundException, StatusInactiveException {
+        WorkersEntity worker = workerService.findById(obj.getWorkerId());
         if (worker.getStatus().equals(DataStatusEnum.INACTIVE))
             throw new StatusInactiveException("Worker status is INACTIVE");
 
         ReviewInvoiceEntity entity = new ReviewInvoiceEntity();
         DepartmentEntity department = departmentService.get(obj.getDepartmentId());
-        PatientEntity patient = patientService.getId(obj.getPatientId());
+        PatientEntity patient = patientService.findById(obj.getPatientId());
 
         entity.setCompany(user.getCompany());
         entity.setWorker(worker);
@@ -113,13 +113,13 @@ public class ReviewInvoiceServiceImpl implements ReviewInvoiceService {
     }
 
     @Override
-    public List<ReviewInvoiceCount> getReviewsCount(Date from, Date to,UserEntity user) {
+    public List<ReviewInvoiceCount> getReviewsCount(Date from, Date to,UserEntity user) throws DataNotFoundException {
         List<IReviewInvoiceCount> reviewInvoiceCounts = reviewInvoiceRepository.getReviewsCount(from.getTime(),
                 to.getTime()+86399999,user.getCompanyId());
 
         List<ReviewInvoiceCount> reviewCounts = new ArrayList<>();
         for (IReviewInvoiceCount reviewInvoiceCount : reviewInvoiceCounts) {
-            reviewCounts.add(new ReviewInvoiceCount(workerMapper.toDto(workerService.get(reviewInvoiceCount.getWorkerId())),
+            reviewCounts.add(new ReviewInvoiceCount(workerMapper.toDto(workerService.findById(reviewInvoiceCount.getWorkerId())),
                     reviewInvoiceCount.getCount()));
         }
         return reviewCounts;

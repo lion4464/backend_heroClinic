@@ -50,7 +50,7 @@ public class SalaryTypeServiceImpl implements SalaryTypeService{
     }
 
     @Override
-    public SalaryTypeEntity update(SalaryTypeRequest obj) {
+    public SalaryTypeEntity update(SalaryTypeRequest obj) throws DataNotFoundException {
         logger.info("Updated SalaryType {} ",obj.getName());
         Optional<SalaryTypeEntity> entity=salaryTypeRepository.findById(obj.getId());
         if (entity.isEmpty())

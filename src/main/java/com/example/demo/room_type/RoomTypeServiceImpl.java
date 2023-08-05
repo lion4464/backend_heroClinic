@@ -24,7 +24,7 @@ public class RoomTypeServiceImpl implements RoomTypeService{
     }
 
     @Override
-    public RoomTypeEntity save(RoomTypeDTO request, UserEntity user) {
+    public RoomTypeEntity save(RoomTypeDTO request, UserEntity user) throws DataNotFoundException {
         return readyEntity(request,user);
     }
 
@@ -48,7 +48,7 @@ public class RoomTypeServiceImpl implements RoomTypeService{
     }
 
     @Override
-    public RoomTypeEntity update(RoomTypeDTO obj,UserEntity user) {
+    public RoomTypeEntity update(RoomTypeDTO obj,UserEntity user) throws DataNotFoundException {
 
         return readyEntity(obj,user);
     }
@@ -64,7 +64,7 @@ public class RoomTypeServiceImpl implements RoomTypeService{
         return resultMap;
     }
 
-    private RoomTypeEntity readyEntity(RoomTypeDTO obj,UserEntity user){
+    private RoomTypeEntity readyEntity(RoomTypeDTO obj,UserEntity user) throws DataNotFoundException {
 
         RoomTypeEntity entity;
         if (obj.getId()==null)

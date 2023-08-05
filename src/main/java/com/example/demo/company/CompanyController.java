@@ -2,6 +2,7 @@ package com.example.demo.company;
 
 
 import com.example.demo.configuration.SwaggerUI;
+import com.example.demo.exceptions.DataNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,13 @@ public class CompanyController {
 
     @GetMapping("/get/{id}")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<CompanyResponse> get(@PathVariable UUID id) {
+    public ResponseEntity<CompanyResponse> get(@PathVariable UUID id) throws DataNotFoundException {
         return ResponseEntity.ok(companymapper.fromEntity(companyService.get(id)));
     }
 
     @PutMapping("/update")
     @Operation(security = {@SecurityRequirement(name = SwaggerUI.AccessToken)},summary = "")
-    public ResponseEntity<CompanyResponse> update(@Valid @RequestBody CompanyRequest request) {
+    public ResponseEntity<CompanyResponse> update(@Valid @RequestBody CompanyRequest request) throws DataNotFoundException {
         return ResponseEntity.ok(companymapper.fromEntity(companyService.update(request)));
     }
     @GetMapping("/all")

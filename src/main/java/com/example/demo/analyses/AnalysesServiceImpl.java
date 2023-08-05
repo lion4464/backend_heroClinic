@@ -2,20 +2,28 @@ package com.example.demo.analyses;
 
 import com.example.demo.exceptions.DataNotFoundException;
 
+import com.example.demo.generic.GenericRepository;
+import com.example.demo.generic.GenericServiceImpl;
+import com.example.demo.generic.JpaGenericRepository;
+import com.example.demo.generic.JpaGenericServiceImpl;
 import com.example.demo.history_anaylse_amount.HistoryAnalyseService;
 import com.example.demo.history_anaylse_amount.HistoryAnalysesEntity;
+import com.example.demo.patients.PatientEntity;
 import com.example.demo.user.UserEntity;
 import com.example.demo.workers.WorkerService;
 import com.example.demo.workers.WorkersEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class AnalysesServiceImpl implements AnalysesService{
+public class AnalysesServiceImpl  extends JpaGenericServiceImpl<AnalysesEntity, UUID> implements AnalysesService{
 
     private final AnalysesRepository analysesRepository;
     private final HistoryAnalyseService historyAnalyseServiceService;
@@ -30,8 +38,8 @@ public class AnalysesServiceImpl implements AnalysesService{
 
 
     @Override
-    public AnalysesEntity save(UserEntity user,AnalysesRequest request) {
-        WorkersEntity worker = workerService.get(request.getWorkerId());
+    public AnalysesEntity saveAnalyse(UserEntity user,AnalysesRequest request) throws DataNotFoundException {
+        WorkersEntity worker = workerService.findById(request.getWorkerId());
         AnalysesEntity entity = new AnalysesEntity();
         entity.setName(request.getName());
         entity.setPayAmount(request.getPayAmount());
@@ -46,32 +54,15 @@ public class AnalysesServiceImpl implements AnalysesService{
         return entity;
     }
 
-    @Override
-    public AnalysesEntity get(UUID id) throws DataNotFoundException {
-        Optional<AnalysesEntity> res = analysesRepository.findById(id);
-        if (res.isEmpty())
-            throw new DataNotFoundException("Analyse is not found :(");
-        return res.get();
-    }
+
 
     @Override
-    public String delete(UUID id) {
-    analysesRepository.deleteById(id);
-        return "Successfully removed";
-    }
-
-    @Override
-    public List<AnalysesEntity> all(UserEntity user) {
-       return analysesRepository.findAllByCompanyId(user.getCompanyId());
-    }
-
-    @Override
-    public AnalysesEntity update(AnalysesRequest obj) {
+    public AnalysesEntity updateAnalayse(AnalysesRequest obj) throws DataNotFoundException {
         logger.info("Updated Analyse {} ",obj.getName());
         Optional<AnalysesEntity> entity = analysesRepository.findById(obj.getId());
         if (entity.isEmpty())
             throw new DataNotFoundException(obj.getId()+"Analyse isn't not found");
-        WorkersEntity worker = workerService.get(obj.getWorkerId());
+        WorkersEntity worker = workerService.findById(obj.getWorkerId());
         AnalysesEntity realEntity = entity.get();
         realEntity.setName(obj.getName());
         realEntity.setModifiedDate(getMillisecondNow());
@@ -87,7 +78,7 @@ public class AnalysesServiceImpl implements AnalysesService{
     }
 
     @Override
-    public List<AnalysesEntity> updateAll(List<AnalysesRequest> objList) {
+    public List<AnalysesEntity> updateAll(List<AnalysesRequest> objList) throws DataNotFoundException {
        List<HistoryAnalysesEntity> historyAnalyseList = new ArrayList<>();
 
         List<UUID> analyseIds=objList.stream().map(AnalysesRequest::getId).collect(Collectors.toList());
@@ -96,7 +87,7 @@ public class AnalysesServiceImpl implements AnalysesService{
         int i=0;
             for (AnalysesRequest entity:objList) {
                 if (!entity.getPayAmount().equals(analysesEntityList.get(i).getPayAmount()) ){
-                    WorkersEntity worker = workerService.get(entity.getWorkerId());
+                    WorkersEntity worker = workerService.findById(entity.getWorkerId());
                 HistoryAnalysesEntity historyAnalysesEntity = new HistoryAnalysesEntity();
                 historyAnalysesEntity.setAmount(entity.getPayAmount());
                 historyAnalysesEntity.setAnalyse(analysesEntityList.get(i));
@@ -117,8 +108,19 @@ public class AnalysesServiceImpl implements AnalysesService{
         return changedAnalyseList;
     }
 
+    @Override
+    public List<AnalysesEntity> getAll(UserEntity user) {
+        return analysesRepository.findAllByCompanyId(user.getCompanyId());
+    }
+
     public Long getMillisecondNow(){
         Date date = new Date();
         return date.getTime();
+    }
+
+
+    @Override
+    protected JpaGenericRepository<AnalysesEntity, UUID> getRepository() {
+        return analysesRepository;
     }
 }

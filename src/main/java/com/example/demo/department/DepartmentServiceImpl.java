@@ -52,7 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService{
     }
 
     @Override
-    public DepartmentEntity update(DepartmentRequest obj) {
+    public DepartmentEntity update(DepartmentRequest obj) throws DataNotFoundException {
         logger.info("Updated department {} ",obj.getName());
         Optional<DepartmentEntity> entity=departmentRepository.findById(obj.getId());
         if (entity.isEmpty())

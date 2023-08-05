@@ -12,6 +12,6 @@ public interface SalaryTypeService{
     SalaryTypeEntity get(UUID id) throws DataNotFoundException;
     String delete(UUID id);
     List<SalaryTypeEntity> all();
-    SalaryTypeEntity update(SalaryTypeRequest obj);
+    SalaryTypeEntity update(SalaryTypeRequest obj) throws DataNotFoundException;
 
 }
