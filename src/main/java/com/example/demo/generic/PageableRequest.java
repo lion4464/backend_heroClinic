@@ -15,9 +15,6 @@ public class PageableRequest {
     private int perPage=10;
     private int Page=0;
     private Sort sort=new Sort();
-    
-
-
     private List<SearchCriteria> search;
 
 }
