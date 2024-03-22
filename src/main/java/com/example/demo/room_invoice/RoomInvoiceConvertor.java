@@ -4,11 +4,8 @@ import com.example.demo.cashier.Cashiermapper;
 import com.example.demo.department.Departmentmapper;
 import com.example.demo.generic.Convertor;
 import com.example.demo.patient_dept.PatientDeptmapper;
-import com.example.demo.patient_dept.PatientDeptmapperImpl;
 import com.example.demo.patients.PatientConvertor;
-import com.example.demo.room.RoomMapper;
 import com.example.demo.room_place.RoomPlaceMapper;
-import com.example.demo.room_type.RoomTypeMapper;
 import com.example.demo.workers.WorkerMapper;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 spring:
   datasource:
     username: postgres
-    password: 7mJY2zCz9g7BJrHg0rN1
-    url: jdbc:postgresql://containers-us-west-101.railway.app:7236/railway
+    password: 20201996Rustam
+    url: jdbc:postgresql://database-1.cd2mum8aexn8.us-east-1.rds.amazonaws.com/hero_clinic
 
   jpa:
     hibernate:
