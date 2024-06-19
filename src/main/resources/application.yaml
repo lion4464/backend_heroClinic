@@ -1,9 +1,8 @@
 spring:
   datasource:
     username: postgres
-    password: 20201996Rustam
-    url: jdbc:postgresql://database-1.cd2mum8aexn8.us-east-1.rds.amazonaws.com/hero_clinic
-
+    password: NpLBqauVkTxFcyLoCZJEmTgomhptExQg
+    url: ${DB_URL:jdbc:postgresql://monorail.proxy.rlwy.net:24097/railway}
   jpa:
     hibernate:
       ddl-auto: update
