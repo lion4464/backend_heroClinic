@@ -1,7 +1,7 @@
 spring:
   datasource:
-    username: tsgotkiabl
-    password: xKC$bJlVwYHbZoVp
+    username: psxwczdhxk
+    password: 5CvVsOtHgnXa$slJ
     url: ${DB_URL:jdbc:postgresql://hero-clinic-server.postgres.database.azure.com:5432/postgres}
   jpa:
     hibernate:
