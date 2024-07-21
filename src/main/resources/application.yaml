@@ -2,7 +2,7 @@ spring:
   datasource:
     username: hero_clinic
     password: !rustam20201996
-    url: ${DB_URL:jdbc:postgresql://hero.postgres.database.azure.com:5432/hero}
+    url: ${DB_URL:jdbc:postgresql://clinic.postgres.database.azure.com:5432/herodb}
   jpa:
     hibernate:
       ddl-auto: update
