@@ -1,8 +1,10 @@
 spring:
   datasource:
     username: ${DB_USERNAME:hero_clinic}
-    password: ${DB_PASSWORD:MCsdNvh4wMkVJebstshTr7kEyxtw8Ma7}
-    url: ${DB_URL:jdbc:postgresql://dpg-cqetppogph6c73b110ug-a.oregon-postgres.render.com/hero_clinic}
+    password: ${DB_PASSWORD:32ZidGLgnIYlRW6IMYsYgRTyfE3uHZLh}
+    url: ${DB_URL:jdbc:postgresql://dpg-crd9bljqf0us73aukkrg-a.oregon-postgres.render.com/hero_clinic_hutt}
+
+
   jpa:
     hibernate:
       ddl-auto: update
